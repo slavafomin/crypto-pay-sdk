@@ -1,9 +1,15 @@
 
+import { HttpClient } from '../../http-client/http-client';
+import { AppToken } from '../common';
+
+
 export interface GetBalanceRequestOptions {
-  params: GetBalanceRequestParams;
+  appToken: AppToken;
+  params: GetBalanceParams;
+  httpClient: HttpClient;
 }
 
-export interface GetBalanceRequestParams {
+export interface GetBalanceParams {
 }
 
 export interface GetBalanceRequest {

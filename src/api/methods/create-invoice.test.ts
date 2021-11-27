@@ -19,13 +19,21 @@ describe('createInvoice()', () => {
 
   });
 
-  it(`should use correct URL`, async () => {
+  describe.only(`should use correct URL`, () => {
 
-    const { request } = await makeCall();
+    const networks: [Network, string][] = [
+      [Network.Mainnet, `https://pay.crypt.bot/${testToken}/createInvoice`],
+      [Network.Testnet, `https://testnet-pay.crypt.bot/${testToken}/createInvoice`],
+    ];
 
-    expect(request.url).toEqual(
-      `https://pay.crypt.bot/${testToken}/createInvoice`
-    );
+    for (const [network, expectedUrl] of networks) {
+
+      it(`for ${network} network`, async () => {
+        const { request } = await makeCall({ network });
+        expect(request.url).toEqual(expectedUrl);
+      });
+
+    }
 
   });
 

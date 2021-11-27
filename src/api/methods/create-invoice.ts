@@ -241,6 +241,7 @@ export async function createInvoice(
       url: getEndpointUrl({
         appToken: appToken,
         method: 'createInvoice',
+        network,
       }),
       payload: request,
       method: HttpRequestMethod.Post,
