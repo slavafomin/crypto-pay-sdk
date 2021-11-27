@@ -1,16 +1,26 @@
 
+import { HttpClient, HttpRequestMethod } from '../../http-client/http-client';
+import { HttpApiResponse, makeRequest } from '../common/make-request';
+import { transformResponse } from '../common/transform-response';
+import { AppToken, BotUsername, Network } from '../common/types';
+
+
 export interface GetMeRequestOptions {
-  params: GetMeRequestParams;
-}
-
-export interface GetMeRequestParams {
-}
-
-export interface GetMeRequest {
+  appToken: AppToken;
+  httpClient: HttpClient;
+  network?: Network;
 }
 
 export interface GetMeResponse {
-  // @todo
+  app_id: number;
+  name: string;
+  payment_processing_bot_username: BotUsername;
+}
+
+export interface GetMeResult {
+  appId: number;
+  name: string;
+  paymentProcessingBotUsername: BotUsername;
 }
 
 
@@ -22,10 +32,31 @@ export interface GetMeResponse {
 export async function getMe(
   options: GetMeRequestOptions
 
-): Promise<GetMeResponse> {
+): Promise<HttpApiResponse<GetMeResult>> {
 
-  const { params } = options;
+  const {
+    appToken,
+    httpClient,
+    network,
 
-  return {};
+  } = options;
+
+  const response = (
+    await makeRequest<GetMeResponse>({
+      appToken,
+      httpClient,
+      methodName: 'getMe',
+      httpMethod: HttpRequestMethod.Get,
+      network,
+    })
+  );
+
+  return transformResponse(response, result => ({
+    appId: result.app_id,
+    name: result.name,
+    paymentProcessingBotUsername: (
+      result.payment_processing_bot_username
+    ),
+  }));
 
 }

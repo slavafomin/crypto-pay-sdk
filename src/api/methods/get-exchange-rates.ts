@@ -1,16 +1,38 @@
 
+import { HttpClient, HttpRequestMethod } from '../../http-client/http-client';
+import { CryptoCurrency, FiatCurrency } from '../common/currencies';
+import { HttpApiResponse, makeRequest } from '../common/make-request';
+import { Money, parseMoney, StringMoney } from '../common/money';
+import { transformResponse } from '../common/transform-response';
+import { AppToken, Network } from '../common/types';
+
+
 export interface GetExchangeRatesRequestOptions {
-  params: GetExchangeRatesRequestParams;
+  appToken: AppToken;
+  httpClient: HttpClient;
+  network?: Network;
 }
 
-export interface GetExchangeRatesRequestParams {
+export type GetExchangeRatesResponse = (
+  GetExchangeRatesResponseItem[]
+);
+
+export interface GetExchangeRatesResponseItem {
+  is_valid: boolean;
+  source: CryptoCurrency;
+  target: FiatCurrency;
+  rate: StringMoney;
 }
 
-export interface GetExchangeRatesRequest {
-}
+export type GetExchangeRatesResult = (
+  GetExchangeRatesResultItem[]
+);
 
-export interface GetExchangeRatesResponse {
-  // @todo
+export interface GetExchangeRatesResultItem {
+  isValid: boolean;
+  source: CryptoCurrency;
+  target: FiatCurrency;
+  rate: Money;
 }
 
 
@@ -21,10 +43,32 @@ export interface GetExchangeRatesResponse {
 export async function getExchangeRates(
   options: GetExchangeRatesRequestOptions
 
-): Promise<GetExchangeRatesResponse> {
+): Promise<HttpApiResponse<GetExchangeRatesResult>> {
 
-  const { params } = options;
+  const {
+    appToken,
+    httpClient,
+    network,
 
-  return {};
+  } = options;
+
+  const response = (
+    await makeRequest<GetExchangeRatesResponse>({
+      appToken,
+      httpClient,
+      methodName: 'getExchangeRates',
+      httpMethod: HttpRequestMethod.Get,
+      network,
+    })
+  );
+
+  return transformResponse(response, result =>
+    result.map(item => ({
+      isValid: item.is_valid,
+      source: item.source,
+      target: item.target,
+      rate: parseMoney(item.rate),
+    }))
+  );
 
 }

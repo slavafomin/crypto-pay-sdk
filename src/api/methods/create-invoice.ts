@@ -3,7 +3,10 @@ import Joi from 'joi';
 
 import { omitEmptyProps } from '../../common/utils';
 import { HttpClient, HttpRequestMethod } from '../../http-client/http-client';
-import { allowedAssets, Amount, AppToken, Asset, Network, Url } from '../common';
+import { supportedAssets } from '../common/assets';
+import { CryptoCurrency } from '../common/currencies';
+import { Money, StringMoney } from '../common/money';
+import { AppToken, Network, Url } from '../common/types';
 import { getEndpointUrl } from '../endpoint';
 
 
@@ -19,12 +22,12 @@ export interface CreateInvoiceParams {
   /**
    * Currency code.
    */
-  asset: Asset;
+  asset: CryptoCurrency;
 
   /**
    * Amount of the invoice.
    */
-  amount: Amount;
+  amount: Money;
 
   /**
    * Description of the invoice. Up to 1024 symbols.
@@ -58,12 +61,12 @@ export interface CreateInvoiceRequest {
   /**
    * Currency code.
    */
-  asset: Asset;
+  asset: CryptoCurrency;
 
   /**
    * Amount of the invoice in float. For example: 125.50
    */
-  amount: string;
+  amount: StringMoney;
 
   /**
    * Optional. Description of the invoice. Up to 1024 symbols.
@@ -155,7 +158,7 @@ export async function createInvoice(
   const paramsSchema = Joi.object({
     asset: Joi.string()
       .required()
-      .valid(...allowedAssets[network]),
+      .valid(...supportedAssets[network]),
 
     amount: Joi.number()
       .required()
@@ -233,8 +236,6 @@ export async function createInvoice(
     paid_btn_url: params.paidBtnUrl,
     payload: params.payload,
   });
-
-  // @todo: remove empty properties
 
   const response = await httpClient
     .sendRequest<CreateInvoiceResponse>({

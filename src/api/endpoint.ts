@@ -1,9 +1,9 @@
 
-import { AppToken, Network } from './common';
+import { AppToken, Network } from './common/types';
 
 
 export const endpointUrlTemplate = (
-  'https://{hostname}/{appToken}/{method}'
+  'https://{hostname}/app{appToken}/{method}'
 );
 
 export const endpointHostnames: Record<Network, string> = {

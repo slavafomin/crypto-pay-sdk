@@ -1,7 +1,8 @@
 
 import { HttpRequest, HttpRequestMethod, HttpResponse } from '../../http-client/http-client';
 import { MockHttpClient } from '../../http-client/mock-http-client';
-import { Asset, Network } from '../common';
+import { CryptoCurrency } from '../common/currencies';
+import { Network } from '../common/types';
 import { createInvoice, CreateInvoiceParams, PaidBtnName } from './create-invoice';
 
 
@@ -19,11 +20,11 @@ describe('createInvoice()', () => {
 
   });
 
-  describe.only(`should use correct URL`, () => {
+  describe(`should use correct URL`, () => {
 
     const networks: [Network, string][] = [
-      [Network.Mainnet, `https://pay.crypt.bot/${testToken}/createInvoice`],
-      [Network.Testnet, `https://testnet-pay.crypt.bot/${testToken}/createInvoice`],
+      [Network.Mainnet, `https://pay.crypt.bot/app${testToken}/createInvoice`],
+      [Network.Testnet, `https://testnet-pay.crypt.bot/app${testToken}/createInvoice`],
     ];
 
     for (const [network, expectedUrl] of networks) {
@@ -41,7 +42,7 @@ describe('createInvoice()', () => {
 
     await expect(makeCall({
       params: {
-        asset: 'FOOBAR' as Asset,
+        asset: 'FOOBAR' as CryptoCurrency,
         amount: 100,
       }
 
@@ -54,7 +55,7 @@ describe('createInvoice()', () => {
     await expect(makeCall({
       network: Network.Mainnet,
       params: {
-        asset: Asset.ETH,
+        asset: CryptoCurrency.ETH,
         amount: 100,
       }
 
@@ -67,7 +68,7 @@ describe('createInvoice()', () => {
     await makeCall({
       network: Network.Testnet,
       params: {
-        asset: Asset.ETH,
+        asset: CryptoCurrency.ETH,
         amount: 100,
       }
     });
@@ -78,7 +79,7 @@ describe('createInvoice()', () => {
 
     await expect(makeCall({
       params: {
-        asset: Asset.TON,
+        asset: CryptoCurrency.TON,
         amount: 0,
       }
 
@@ -90,7 +91,7 @@ describe('createInvoice()', () => {
 
     await expect(makeCall({
       params: {
-        asset: Asset.TON,
+        asset: CryptoCurrency.TON,
         amount: -100,
       }
 
@@ -102,7 +103,7 @@ describe('createInvoice()', () => {
 
     await expect(makeCall({
       params: {
-        asset: Asset.TON,
+        asset: CryptoCurrency.TON,
         amount: 100,
         description: 'A'.repeat(1025),
       }
@@ -117,7 +118,7 @@ describe('createInvoice()', () => {
 
     await expect(makeCall({
       params: {
-        asset: Asset.TON,
+        asset: CryptoCurrency.TON,
         amount: 100,
         paidBtnName: 'FOOBAR' as PaidBtnName,
       }
@@ -140,7 +141,7 @@ describe('createInvoice()', () => {
       it(`when paidBtnName is equal to "${paidBtnName}"`, async () => {
         await expect(makeCall({
           params: {
-            asset: Asset.TON,
+            asset: CryptoCurrency.TON,
             amount: 100,
             paidBtnName,
           }
@@ -156,7 +157,7 @@ describe('createInvoice()', () => {
     async () => {
       await expect(makeCall({
         params: {
-          asset: Asset.TON,
+          asset: CryptoCurrency.TON,
           amount: 100,
           paidBtnName: PaidBtnName.Callback,
           paidBtnUrl: 'https://example.com',
@@ -168,7 +169,7 @@ describe('createInvoice()', () => {
   it(`paidBtnUrl must start with http or https`, async () => {
     await expect(makeCall({
       params: {
-        asset: Asset.TON,
+        asset: CryptoCurrency.TON,
         amount: 100,
         paidBtnName: PaidBtnName.OpenBot,
         paidBtnUrl: 'tg://foobar',
@@ -181,7 +182,7 @@ describe('createInvoice()', () => {
   it(`payload byte size must not exceed 1 KB`, async () => {
     await expect(makeCall({
       params: {
-        asset: Asset.TON,
+        asset: CryptoCurrency.TON,
         amount: 100,
         payload: 'Ы'.repeat(512) + 'A',
       }
@@ -208,7 +209,7 @@ describe('createInvoice()', () => {
       },
       network,
       params = {
-        asset: Asset.TON,
+        asset: CryptoCurrency.TON,
         amount: 100.25,
       },
 

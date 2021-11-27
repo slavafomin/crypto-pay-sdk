@@ -1,11 +1,14 @@
 
-# crypto-bot-sdk
+# @crypto-pay/sdk
 
-Node.js SDK for Telegram CryptoBot.
+Node.js SDK for Telegram [CryptoBot][crypto-bot]
+([CryptoPay API][crypto-pay-api]).
 
 ---
 
 ## Contest-related information
+
+_(this section will be deleted after the contest)_
 
 …
 
@@ -57,3 +60,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+  [crypto-bot]: https://t.me/CryptoBot
+  [crypto-pay-api]:https://telegra.ph/Crypto-Pay-API-11-25
