@@ -1,7 +1,7 @@
 {
   "name": "crypto-bot-sdk",
   "version": "0.0.0",
-  "description": "",
+  "description": "Node.js SDK for Telegram CryptoBot",
   "scripts": {
     "test": "jest",
     "test:coverage": "jest --coverage"
