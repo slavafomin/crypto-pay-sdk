@@ -1,9 +1,18 @@
 
-import { HttpRequest, HttpRequestMethod, HttpResponse } from '../../http-client/http-client';
+import { HttpRequest, HttpRequestMethod } from '../../http-client/http-client';
 import { MockHttpClient } from '../../http-client/mock-http-client';
 import { CryptoCurrency } from '../common/currencies';
+import { HttpApiResponse } from '../common/make-request';
 import { Network } from '../common/types';
-import { createInvoice, CreateInvoiceParams, PaidBtnName } from './create-invoice';
+
+import {
+  createInvoice,
+  CreateInvoiceParams,
+  CreateInvoiceResponse,
+  CreateInvoiceResult,
+  PaidBtnName,
+
+} from './create-invoice';
 
 
 // noinspection SpellCheckingInspection
@@ -218,22 +227,55 @@ describe('createInvoice()', () => {
 
   });
 
+  it(`payload must be deserialized from JSON`, async () => {
+
+    const payload = (
+      { this: { is: { a: { test: 'payload' } }} }
+    );
+
+
+    const { result } = await makeCall({
+      params: {
+        asset: CryptoCurrency.TON,
+        amount: 100,
+        paidBtnUrl: `https://example.com`,
+      },
+      response: {
+        status: 200,
+        payload: {
+          ok: true,
+          result: <any> <Partial<CreateInvoiceResponse>> {
+            payload: JSON.stringify(payload),
+          },
+        },
+      },
+    });
+
+    expect(result.payload.result.payload)
+      .toEqual(payload)
+    ;
+
+  });
+
 
   async function makeCall(options?: {
     network?: Network;
     params?: CreateInvoiceParams;
-    response?: HttpResponse,
+    response?: HttpApiResponse<CreateInvoiceResponse>,
 
   }): Promise<{
     request: HttpRequest;
+    result: HttpApiResponse<CreateInvoiceResult>;
 
   }> {
 
     const {
-      response = {
+      response = <HttpApiResponse<CreateInvoiceResponse>> {
         status: 200,
         payload: {
           ok: true,
+          result: {
+          },
         },
       },
       network,
@@ -247,7 +289,7 @@ describe('createInvoice()', () => {
 
     const httpClient = new MockHttpClient(response);
 
-    await createInvoice({
+    const result = await createInvoice({
       appToken: testToken,
       params,
       httpClient: httpClient,
@@ -256,7 +298,7 @@ describe('createInvoice()', () => {
 
     const request = httpClient.getLastRequest();
 
-    return { request };
+    return { request, result };
 
   }
 

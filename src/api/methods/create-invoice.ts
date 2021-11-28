@@ -6,8 +6,9 @@ import { omitEmptyProps } from '../../common/utils';
 import { HttpClient, HttpRequestMethod } from '../../http-client/http-client';
 import { supportedAssets } from '../common/assets';
 import { CryptoCurrency } from '../common/currencies';
-import { makeRequest } from '../common/make-request';
-import { Money, StringMoney } from '../common/money';
+import { HttpApiResponse, makeRequest } from '../common/make-request';
+import { Money, parseMoney, StringMoney } from '../common/money';
+import { transformResponse } from '../common/transform-response';
 import { AppToken, DateString, Network, Url } from '../common/types';
 import { InvoiceStatus } from './get-invoices';
 
@@ -200,7 +201,7 @@ const maxPayloadByteSize = 1024;
 export async function createInvoice(
   options: CreateInvoiceOptions
 
-): Promise<CreateInvoiceResult> {
+): Promise<HttpApiResponse<CreateInvoiceResult>> {
 
   const {
     appToken,
@@ -280,7 +281,10 @@ export async function createInvoice(
     allow_anonymous: params.allowAnonymous,
   });
 
-  const response = await makeRequest({
+  const response = await makeRequest<
+    CreateInvoiceRequest,
+    CreateInvoiceResponse
+  >({
     appToken,
     httpClient,
     methodName: 'createInvoice',
@@ -289,10 +293,29 @@ export async function createInvoice(
     network,
   });
 
-  // @todo: parse and process the response
-  // @todo: handle errors
-
-  return <CreateInvoiceResult> {};
+  // Deserializing server response
+  return transformResponse(response, result => ({
+    invoiceId: result.invoice_id,
+    status: result.status,
+    hash: result.hash,
+    asset: result.asset,
+    amount: parseMoney(result.amount),
+    payUrl: result.pay_url,
+    description: result.description,
+    createdAt: (result.created_at
+      ? new Date(result.created_at)
+      : undefined
+    ),
+    allowComments: result.allow_comments,
+    allowAnonymous: result.allow_anonymous,
+    payload: (result.payload
+      ? JSON.parse(result.payload)
+      : undefined
+    ),
+    paidBtnName: result.paid_btn_name,
+    paidBtnUrl: result.paid_btn_url,
+    isConfirmed: result.is_confirmed,
+  }));
 
 }
 
