@@ -8,6 +8,7 @@ import { CryptoCurrency } from '../common/currencies';
 import { Invoice, InvoiceResponse, InvoiceStatus, invoiceStatuses, parseInvoiceResponse } from '../common/invoice';
 import { HttpApiResponse, makeRequest } from '../common/make-request';
 import { defaultNetwork, Network } from '../common/network';
+import { PaginationParams, paginationSerializers, paginationValidators } from '../common/pagination';
 import { transformResponse } from '../common/transform-response';
 import { AppToken, InvoiceId} from '../common/types';
 
@@ -19,7 +20,7 @@ export interface GetInvoicesRequestOptions {
   network?: Network;
 }
 
-export interface GetInvoicesParams {
+export interface GetInvoicesParams extends PaginationParams {
 
   /**
    * Optional. Currency code. Default: all assets.
@@ -37,21 +38,9 @@ export interface GetInvoicesParams {
    */
   status?: InvoiceStatus;
 
-  /**
-   * Optional. Offset needed to return a specific
-   * subset of invoices. Default 0.
-   */
-  offset?: number;
-
-  /**
-   * Optional. Number of invoices to return.
-   * Default 100, max 1000.
-   */
-  count?: number;
-
 }
 
-export interface GetInvoicesRequest {
+export interface GetInvoicesRequest extends PaginationParams {
 
   /**
    * Optional. Currency code. Default: all assets.
@@ -68,18 +57,6 @@ export interface GetInvoicesRequest {
    * active or paid. Default: all statuses.
    */
   status?: InvoiceStatus;
-
-  /**
-   * Optional. Offset needed to return a specific
-   * subset of invoices. Default 0.
-   */
-  offset?: number;
-
-  /**
-   * Optional. Number of invoices to return.
-   * Default 100, max 1000.
-   */
-  count?: number;
 
 }
 
@@ -123,15 +100,7 @@ export async function getInvoices(
       .optional()
       .valid(...invoiceStatuses),
 
-    offset: Joi.number()
-      .optional()
-      .default(0),
-
-    count: Joi.number()
-      .optional()
-      .greater(0)
-      .max(1000)
-      .default(100),
+    ...paginationValidators,
 
   });
 
@@ -153,8 +122,7 @@ export async function getInvoices(
       : undefined
     ),
     status: params.status,
-    offset: params.offset,
-    count: params.count,
+    ...paginationSerializers(params),
   });
 
   const response = await makeRequest<

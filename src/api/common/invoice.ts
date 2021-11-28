@@ -26,9 +26,12 @@ export interface InvoiceResponse {
   pay_url: Url,
   description: string;
   created_at: DateString;
+  paid_at?: DateString;
   allow_comments: boolean;
   allow_anonymous: boolean;
-  payload: string;
+  paid_anonymously?: boolean;
+  comment?: string;
+  payload?: string;
   paid_btn_name: PaidBtnName;
   paid_btn_url: Url;
   is_confirmed: boolean;
@@ -43,8 +46,11 @@ export interface Invoice {
   payUrl: Url,
   description: string;
   createdAt: Date;
+  paidAt: Date;
   allowComments: boolean;
   allowAnonymous: boolean;
+  paidAnonymously: boolean;
+  comment: string;
   payload: any;
   paidBtnName: PaidBtnName;
   paidBtnUrl: Url;
@@ -69,8 +75,14 @@ export function parseInvoiceResponse(
       ? new Date(response.created_at)
       : undefined
     ),
+    paidAt: (response.paid_at
+      ? new Date(response.paid_at)
+      : undefined
+    ),
     allowComments: response.allow_comments,
     allowAnonymous: response.allow_anonymous,
+    paidAnonymously: response.paid_anonymously,
+    comment: response.comment,
     payload: (response.payload
       ? JSON.parse(response.payload)
       : undefined
