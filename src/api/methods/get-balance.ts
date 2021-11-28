@@ -45,7 +45,7 @@ export async function getBalance(
   } = options;
 
   const response = (
-    await makeRequest<GetBalanceResponse>({
+    await makeRequest<void, GetBalanceResponse>({
       appToken,
       httpClient,
       methodName: 'getBalance',

@@ -1,13 +1,15 @@
 
 import Joi from 'joi';
+import { TextEncoder } from 'util';
 
 import { omitEmptyProps } from '../../common/utils';
 import { HttpClient, HttpRequestMethod } from '../../http-client/http-client';
 import { supportedAssets } from '../common/assets';
 import { CryptoCurrency } from '../common/currencies';
+import { makeRequest } from '../common/make-request';
 import { Money, StringMoney } from '../common/money';
-import { AppToken, Network, Url } from '../common/types';
-import { getEndpointUrl } from '../endpoint';
+import { AppToken, DateString, Network, Url } from '../common/types';
+import { InvoiceStatus } from './get-invoices';
 
 
 export interface CreateInvoiceOptions {
@@ -51,8 +53,11 @@ export interface CreateInvoiceParams {
   /**
    * Optional. Some data. User ID, payment id, or any data
    * you want to attach to the invoice (up to 1 KB).
+   *
+   * You can specify any value here, it will be
+   * automatically serialized to/from JSON string.
    */
-  payload?: string;
+  payload?: any;
 
   /**
    * Optional. Allow adding comments when paying an invoice.
@@ -145,13 +150,38 @@ export enum PaidBtnName {
 }
 
 export interface CreateInvoiceResponse {
-  // @todo
+  invoice_id: number;
+  status: InvoiceStatus;
+  hash: string;
+  asset: CryptoCurrency;
+  amount: StringMoney;
+  pay_url: Url,
+  description: string;
+  created_at: DateString;
+  allow_comments: boolean;
+  allow_anonymous: boolean;
+  payload: string;
+  paid_btn_name: PaidBtnName;
+  paid_btn_url: Url;
+  is_confirmed: boolean;
 }
 
 export interface CreateInvoiceResult {
-  // @todo
+  invoiceId: number;
+  status: InvoiceStatus;
+  hash: string;
+  asset: CryptoCurrency;
+  amount: Money;
+  payUrl: Url,
+  description: string;
+  createdAt: Date;
+  allowComments: boolean;
+  allowAnonymous: boolean;
+  payload: any;
+  paidBtnName: PaidBtnName;
+  paidBtnUrl: Url;
+  isConfirmed: boolean;
 }
-
 
 export const allowedPaidBtnNames: PaidBtnName[] = [
   PaidBtnName.ViewItem,
@@ -206,6 +236,7 @@ export async function createInvoice(
           PaidBtnName.ViewItem,
           PaidBtnName.OpenChannel,
           PaidBtnName.OpenBot,
+          PaidBtnName.Callback,
         ),
         then: Joi.string()
           .required()
@@ -215,9 +246,7 @@ export async function createInvoice(
         otherwise: Joi.forbidden(),
       }),
 
-    payload: Joi.string()
-      .optional()
-      .max(maxPayloadByteSize, 'utf8'),
+    payload: Joi.any(),
 
     allowComments: Joi.boolean()
       .optional()
@@ -229,68 +258,69 @@ export async function createInvoice(
 
   });
 
-  let validationResult;
-
-  // This can throw validation errors
-  try {
-    validationResult = await paramsSchema
-      .validateAsync(options.params, {
-        warnings: true,
-      })
-    ;
-
-  } catch (error) {
-
-    if (
-      error.details[0].path.join('.') === 'payload' &&
-      error.details[0].type === 'string.max'
-    ) {
-      throw new Error(
-        `"payload" byte size exceeds the limit of ${maxPayloadByteSize} Bytes`
-      );
-
-    } else {
-      throw error;
-
-    }
-
-  }
-
-  const { warning, debug } = validationResult;
+  const validationResult = await paramsSchema
+    .validateAsync(options.params, {
+      warnings: true,
+    })
+  ;
 
   const params: CreateInvoiceParams = (
     validationResult.value
   );
 
-  console.log({ params, warning, debug });
-
   // Request serialization
-  const request = omitEmptyProps<CreateInvoiceRequest>({
+  const requestData = omitEmptyProps<CreateInvoiceRequest>({
     asset: params.asset,
     amount: params.amount.toString(),
     description: params.description,
     paid_btn_name: params.paidBtnName,
     paid_btn_url: params.paidBtnUrl,
-    payload: params.payload,
+    payload: handlePayload(options.params.payload),
     allow_comments: params.allowComments,
     allow_anonymous: params.allowAnonymous,
   });
 
-  const response = await httpClient
-    .sendRequest<CreateInvoiceResponse>({
-      url: getEndpointUrl({
-        appToken: appToken,
-        method: 'createInvoice',
-        network,
-      }),
-      payload: request,
-      method: HttpRequestMethod.Post,
-    })
-  ;
+  const response = await makeRequest({
+    appToken,
+    httpClient,
+    methodName: 'createInvoice',
+    requestData,
+    httpMethod: HttpRequestMethod.Post,
+    network,
+  });
 
   // @todo: parse and process the response
   // @todo: handle errors
 
   return <CreateInvoiceResult> {};
+
+}
+
+
+/**
+ * Serializes specified payload as a JSON string
+ * and makes sure that it's size doesn't exceed
+ * the limits enforced by the API.
+ */
+function handlePayload(payload: any): (string | undefined) {
+
+  if (!payload) {
+    return undefined;
+  }
+
+  const serializedPayload = JSON.stringify(payload);
+
+  const payloadByteSize = (
+    new TextEncoder().encode(serializedPayload)
+  ).length;
+
+  if (payloadByteSize > maxPayloadByteSize) {
+    throw new Error(
+      `"payload" byte size (${payloadByteSize} Bytes) ` +
+      `exceeds the limit of ${maxPayloadByteSize} Bytes`
+    );
+  }
+
+  return serializedPayload;
 
 }

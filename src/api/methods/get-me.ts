@@ -42,7 +42,7 @@ export async function getMe(
   } = options;
 
   const response = (
-    await makeRequest<GetMeResponse>({
+    await makeRequest<void, GetMeResponse>({
       appToken,
       httpClient,
       methodName: 'getMe',

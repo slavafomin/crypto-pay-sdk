@@ -58,7 +58,7 @@ export async function getCurrencies(
   } = options;
 
   const response = (
-    await makeRequest<GetCurrenciesResponse>({
+    await makeRequest<void, GetCurrenciesResponse>({
       appToken,
       httpClient,
       methodName: 'getCurrencies',

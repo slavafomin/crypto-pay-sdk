@@ -1,5 +1,6 @@
 
-import { Asset, InvoiceId } from '../common';
+import { CryptoCurrency } from '../common/currencies';
+import { InvoiceId } from '../common/types';
 
 
 export interface GetInvoicesRequestOptions {
@@ -11,7 +12,7 @@ export interface GetInvoicesParams {
   /**
    * Optional. Currency code. Default: all assets.
    */
-  asset?: Asset;
+  asset?: CryptoCurrency;
 
   /**
    * Optional. Invoice IDs separated by comma.
@@ -43,7 +44,7 @@ export interface GetInvoicesRequest {
   /**
    * Optional. Currency code. Default: all assets.
    */
-  asset?: Asset;
+  asset?: CryptoCurrency;
 
   /**
    * Optional. Invoice IDs separated by comma.

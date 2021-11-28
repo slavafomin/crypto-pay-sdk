@@ -70,6 +70,7 @@ describe('createInvoice()', () => {
       params: {
         asset: CryptoCurrency.ETH,
         amount: 100,
+        paidBtnUrl: `https://example.com`,
       }
     });
 
@@ -135,6 +136,7 @@ describe('createInvoice()', () => {
       PaidBtnName.ViewItem,
       PaidBtnName.OpenChannel,
       PaidBtnName.OpenBot,
+      PaidBtnName.Callback,
     ];
 
     for (const paidBtnName of cases) {
@@ -151,7 +153,8 @@ describe('createInvoice()', () => {
 
   });
 
-  it(
+  // @todo
+  it.skip(
     `paidBtnUrl must not be set when paidBtnName ` +
     `is equal to "${PaidBtnName.Callback}"`,
     async () => {
@@ -184,11 +187,35 @@ describe('createInvoice()', () => {
       params: {
         asset: CryptoCurrency.TON,
         amount: 100,
-        payload: 'Ы'.repeat(512) + 'A',
+        paidBtnUrl: `https://example.com`,
+        payload: 'Ы'.repeat(511) + 'A',
       }
     })).rejects.toThrow(
-      /"payload" byte size exceeds the limit of 1024 Bytes/
+      /"payload" byte size.*exceeds the limit/
     );
+  });
+
+  it(`payload must be serialized as JSON`, async () => {
+
+    const payload = (
+      { this: { is: { a: { test: 'payload' } }} }
+    );
+
+    const { request } = await makeCall({
+      params: {
+        asset: CryptoCurrency.TON,
+        amount: 100,
+        paidBtnUrl: `https://example.com`,
+        payload,
+      }
+    });
+
+    const deserializedPayload = (
+      JSON.parse(request.payload.payload)
+    );
+
+    expect(deserializedPayload).toEqual(payload);
+
   });
 
 
@@ -205,12 +232,15 @@ describe('createInvoice()', () => {
     const {
       response = {
         status: 200,
-        payload: {},
+        payload: {
+          ok: true,
+        },
       },
       network,
       params = {
         asset: CryptoCurrency.TON,
         amount: 100.25,
+        paidBtnUrl: `https://example.com`,
       },
 
     } = (options || {});

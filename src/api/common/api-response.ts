@@ -1,4 +1,7 @@
 
+import { ApiErrorCode, ApiErrorName } from './api-errors';
+
+
 export type ApiResponse<ResultType> = (
   | SuccessApiResponse<ResultType>
   | FailedApiResponse
@@ -16,6 +19,11 @@ export interface FailedApiResponse {
 
   ok: false;
 
-  // @todo
+  error: FailedApiError;
 
+}
+
+export interface FailedApiError {
+  code: (ApiErrorCode | number);
+  name: (ApiErrorName | string);
 }

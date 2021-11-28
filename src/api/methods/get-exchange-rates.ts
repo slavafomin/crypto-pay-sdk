@@ -53,7 +53,7 @@ export async function getExchangeRates(
   } = options;
 
   const response = (
-    await makeRequest<GetExchangeRatesResponse>({
+    await makeRequest<void, GetExchangeRatesResponse>({
       appToken,
       httpClient,
       methodName: 'getExchangeRates',

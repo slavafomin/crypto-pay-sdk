@@ -38,11 +38,14 @@ export class GotHttpClient implements HttpClient {
 
     } = options;
 
+    // @todo: handle retries and timeouts
+
     const response = await got<ResponsePayloadType>(url, {
       method,
       headers,
       json: payload,
       responseType: 'json',
+      throwHttpErrors: false,
     });
 
     return {

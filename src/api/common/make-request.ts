@@ -1,8 +1,8 @@
 
 import { HttpClient, HttpRequestMethod, HttpResponse } from '../../http-client/http-client';
 import { getEndpointUrl } from '../endpoint';
-import { ApiResponse, SuccessApiResponse } from './api-response';
-import { HttpError } from './http-error';
+import { ApiError } from '../errors/api-error';
+import { ApiResponse, FailedApiResponse, SuccessApiResponse } from './api-response';
 import { AppToken, Network } from './types';
 
 
@@ -10,11 +10,13 @@ export type HttpApiResponse<Type> = HttpResponse<
   SuccessApiResponse<Type>
 >;
 
+// @todo: make sure `makeRequest` is used everywhere
 
-export async function makeRequest<ResponseType>(options: {
+export async function makeRequest<RequestType, ResponseType>(options: {
   appToken: AppToken;
   httpClient: HttpClient;
   methodName: string;
+  requestData?: RequestType;
   httpMethod?: HttpRequestMethod;
   network?: Network;
 
@@ -24,6 +26,7 @@ export async function makeRequest<ResponseType>(options: {
     appToken,
     httpClient,
     methodName,
+    requestData,
     httpMethod = HttpRequestMethod.Get,
     network = Network.Mainnet,
 
@@ -39,25 +42,18 @@ export async function makeRequest<ResponseType>(options: {
         network,
       }),
       method: httpMethod,
+      payload: requestData,
     })
   ;
 
   const { status, payload } = response;
 
-  if (status >= 400) {
-    throw new HttpError(
-      `HTTP request failed with status: ${status}`,
-      payload
-    );
-  }
-
   if (isSuccessResponse(response)) {
     return response;
 
   } else {
-    throw new HttpError(
-      `API request failed (not OK)`,
-      payload
+    throw new ApiError(
+      (payload as FailedApiResponse).error
     );
 
   }
@@ -70,6 +66,9 @@ function isSuccessResponse<ResponseType>(
 
 ): response is HttpResponse<SuccessApiResponse<ResponseType>> {
 
-  return Boolean(response.payload.ok);
+  return (
+    response.status < 400 &&
+    Boolean(response.payload.ok)
+  );
 
 }
