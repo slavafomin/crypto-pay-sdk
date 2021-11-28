@@ -10,7 +10,8 @@ Node.js SDK for Telegram [CryptoBot][crypto-bot]
 
 _(this section will be deleted after the contest)_
 
-…
+See the [Crypto Pay API Review](https://telegra.ph/Crypto-Pay-API-Review-11-28)
+for notices regarding the API implementation.
 
 ---
 
@@ -35,6 +36,20 @@ _(this section will be deleted after the contest)_
 
 
 ## Contributing
+
+…
+
+
+## Notices
+
+- `payload` is less than `description` (in byte terms)
+
+- it is said that `paid_btn_name` has a `callback`
+  value by default, when in real life it has no value.
+  The result is different when `paid_btn_name` is omitted
+  from the request or when it explicitly set to `callback`.
+  In latter case the `PAID_BTN_URL_REQUIRED` error is raised
+  because it expects the `paid_btn_url` value.
 
 …
 
