@@ -2,14 +2,13 @@
 import { HttpRequest, HttpRequestMethod } from '../../http-client/http-client';
 import { MockHttpClient } from '../../http-client/mock-http-client';
 import { CryptoCurrency } from '../common/currencies';
+import { Invoice, InvoiceResponse } from '../common/invoice';
 import { HttpApiResponse } from '../common/make-request';
-import { Network } from '../common/types';
+import { Network } from '../common/network';
 
 import {
   createInvoice,
   CreateInvoiceParams,
-  CreateInvoiceResponse,
-  CreateInvoiceResult,
   PaidBtnName,
 
 } from './create-invoice';
@@ -220,7 +219,7 @@ describe('createInvoice()', () => {
     });
 
     const deserializedPayload = (
-      JSON.parse(request.payload.payload)
+      JSON.parse(request.body.payload)
     );
 
     expect(deserializedPayload).toEqual(payload);
@@ -244,7 +243,7 @@ describe('createInvoice()', () => {
         status: 200,
         payload: {
           ok: true,
-          result: <any> <Partial<CreateInvoiceResponse>> {
+          result: <any> <Partial<InvoiceResponse>> {
             payload: JSON.stringify(payload),
           },
         },
@@ -261,16 +260,16 @@ describe('createInvoice()', () => {
   async function makeCall(options?: {
     network?: Network;
     params?: CreateInvoiceParams;
-    response?: HttpApiResponse<CreateInvoiceResponse>,
+    response?: HttpApiResponse<InvoiceResponse>,
 
   }): Promise<{
     request: HttpRequest;
-    result: HttpApiResponse<CreateInvoiceResult>;
+    result: HttpApiResponse<Invoice>;
 
   }> {
 
     const {
-      response = <HttpApiResponse<CreateInvoiceResponse>> {
+      response = <HttpApiResponse<InvoiceResponse>> {
         status: 200,
         payload: {
           ok: true,

@@ -1,5 +1,6 @@
 
-import { AppToken, Network } from './common/types';
+import { defaultNetwork, Network } from './common/network';
+import { AppToken} from './common/types';
 
 
 export const endpointUrlTemplate = (
@@ -21,7 +22,7 @@ export function getEndpointUrl(options: {
   const {
     appToken,
     method,
-    network = Network.Mainnet,
+    network = defaultNetwork,
 
   } = options;
 

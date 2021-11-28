@@ -3,7 +3,8 @@ import { HttpClient, HttpRequestMethod, HttpResponse } from '../../http-client/h
 import { getEndpointUrl } from '../endpoint';
 import { ApiError } from '../errors/api-error';
 import { ApiResponse, FailedApiResponse, SuccessApiResponse } from './api-response';
-import { AppToken, Network } from './types';
+import { defaultNetwork, Network } from './network';
+import { AppToken} from './types';
 
 
 export type HttpApiResponse<Type> = HttpResponse<
@@ -16,7 +17,8 @@ export async function makeRequest<RequestType, ResponseType>(options: {
   appToken: AppToken;
   httpClient: HttpClient;
   methodName: string;
-  requestData?: RequestType;
+  query?: RequestType;
+  body?: RequestType;
   httpMethod?: HttpRequestMethod;
   network?: Network;
 
@@ -26,9 +28,10 @@ export async function makeRequest<RequestType, ResponseType>(options: {
     appToken,
     httpClient,
     methodName,
-    requestData,
+    query,
+    body,
     httpMethod = HttpRequestMethod.Get,
-    network = Network.Mainnet,
+    network = defaultNetwork,
 
   } = options;
 
@@ -42,7 +45,8 @@ export async function makeRequest<RequestType, ResponseType>(options: {
         network,
       }),
       method: httpMethod,
-      payload: requestData,
+      query: query,
+      body: body,
     })
   ;
 

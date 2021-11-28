@@ -33,17 +33,21 @@ export class GotHttpClient implements HttpClient {
     const {
       url,
       method,
-      payload,
+      query,
+      body,
       headers,
 
     } = options;
 
     // @todo: handle retries and timeouts
+    // @todo: forbid redirects
+    // @todo: server authentication
 
     const response = await got<ResponsePayloadType>(url, {
       method,
       headers,
-      json: payload,
+      searchParams: query,
+      json: body,
       responseType: 'json',
       throwHttpErrors: false,
     });

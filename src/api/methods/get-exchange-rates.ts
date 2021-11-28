@@ -3,8 +3,9 @@ import { HttpClient, HttpRequestMethod } from '../../http-client/http-client';
 import { CryptoCurrency, FiatCurrency } from '../common/currencies';
 import { HttpApiResponse, makeRequest } from '../common/make-request';
 import { Money, parseMoney, StringMoney } from '../common/money';
+import { Network } from '../common/network';
 import { transformResponse } from '../common/transform-response';
-import { AppToken, Network } from '../common/types';
+import { AppToken} from '../common/types';
 
 
 export interface GetExchangeRatesRequestOptions {

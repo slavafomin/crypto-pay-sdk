@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Node.js SDK for Telegram CryptoBot (CryptoPay API)",
   "scripts": {
+    "build": "tsc -p ./tsconfig.lib.json",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },

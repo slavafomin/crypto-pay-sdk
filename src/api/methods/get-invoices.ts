@@ -1,10 +1,22 @@
 
+import Joi from 'joi';
+
+import { omitEmptyProps } from '../../common/utils';
+import { HttpClient, HttpRequestMethod } from '../../http-client/http-client';
+import { supportedAssets } from '../common/assets';
 import { CryptoCurrency } from '../common/currencies';
-import { InvoiceId } from '../common/types';
+import { Invoice, InvoiceResponse, InvoiceStatus, invoiceStatuses, parseInvoiceResponse } from '../common/invoice';
+import { HttpApiResponse, makeRequest } from '../common/make-request';
+import { defaultNetwork, Network } from '../common/network';
+import { transformResponse } from '../common/transform-response';
+import { AppToken, InvoiceId} from '../common/types';
 
 
 export interface GetInvoicesRequestOptions {
-  params: GetInvoicesParams;
+  appToken: AppToken;
+  params?: GetInvoicesParams;
+  httpClient: HttpClient;
+  network?: Network;
 }
 
 export interface GetInvoicesParams {
@@ -71,37 +83,97 @@ export interface GetInvoicesRequest {
 
 }
 
-export enum InvoiceStatus {
-  Active = 'active',
-  Paid = 'paid',
+export interface GetInvoicesResponse {
+  count: number;
+  items: InvoiceResponse[];
 }
 
-export interface GetInvoicesResponse {
-  // @todo
+export interface GetInvoicesResult {
+  count: number;
+  items: Invoice[];
 }
 
 
 export async function getInvoices(
   options: GetInvoicesRequestOptions
 
-): Promise<GetInvoicesResponse> {
+): Promise<HttpApiResponse<GetInvoicesResult>> {
 
-  const { params } = options;
+  const {
+    appToken,
+    httpClient,
+    network = defaultNetwork,
 
-  // @todo: set defaults
-  // @todo: validate params
+  } = options;
+
+  const paramsSchema = Joi.object({
+    asset: Joi.string()
+      .optional()
+      .valid(...supportedAssets[network]),
+
+    invoiceIds: Joi.array()
+      .optional()
+      .items(
+        Joi.number()
+          .required()
+          .greater(0)
+      ),
+
+    status: Joi.string()
+      .optional()
+      .valid(...invoiceStatuses),
+
+    offset: Joi.number()
+      .optional()
+      .default(0),
+
+    count: Joi.number()
+      .optional()
+      .greater(0)
+      .max(1000)
+      .default(100),
+
+  });
+
+  const validationResult = await paramsSchema
+    .validateAsync(options.params || {}, {
+      warnings: true,
+    })
+  ;
+
+  const params: GetInvoicesParams = (
+    validationResult.value
+  );
 
   // Request serialization
-  const payload: GetInvoicesRequest = {
+  const query = omitEmptyProps<GetInvoicesRequest>({
     asset: params.asset,
-    invoice_ids: params.invoiceIds.join(','),
+    invoice_ids: (params.invoiceIds
+      ? params.invoiceIds.join(',')
+      : undefined
+    ),
     status: params.status,
     offset: params.offset,
     count: params.count,
-  };
+  });
 
-  // @todo: make request
+  const response = await makeRequest<
+    GetInvoicesRequest,
+    GetInvoicesResponse
+  >({
+    appToken,
+    httpClient,
+    methodName: 'getInvoices',
+    query,
+    httpMethod: HttpRequestMethod.Get,
+    network,
+  });
 
-  return {};
+  return transformResponse(response, result => ({
+    count: result.count,
+    items: result.items.map(
+      item => parseInvoiceResponse(item)
+    )
+  }));
 
 }

@@ -1,6 +1,6 @@
 
 import { CryptoCurrency } from './currencies';
-import { Network } from './types';
+import { Network } from './network';
 
 
 export const supportedAssets: Record<Network, CryptoCurrency[]> = {

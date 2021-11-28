@@ -6,11 +6,12 @@ import { omitEmptyProps } from '../../common/utils';
 import { HttpClient, HttpRequestMethod } from '../../http-client/http-client';
 import { supportedAssets } from '../common/assets';
 import { CryptoCurrency } from '../common/currencies';
+import { Invoice, InvoiceResponse, parseInvoiceResponse } from '../common/invoice';
 import { HttpApiResponse, makeRequest } from '../common/make-request';
-import { Money, parseMoney, StringMoney } from '../common/money';
+import { Money, StringMoney } from '../common/money';
+import { defaultNetwork, Network } from '../common/network';
 import { transformResponse } from '../common/transform-response';
-import { AppToken, DateString, Network, Url } from '../common/types';
-import { InvoiceStatus } from './get-invoices';
+import { AppToken, Url } from '../common/types';
 
 
 export interface CreateInvoiceOptions {
@@ -150,40 +151,6 @@ export enum PaidBtnName {
 
 }
 
-export interface CreateInvoiceResponse {
-  invoice_id: number;
-  status: InvoiceStatus;
-  hash: string;
-  asset: CryptoCurrency;
-  amount: StringMoney;
-  pay_url: Url,
-  description: string;
-  created_at: DateString;
-  allow_comments: boolean;
-  allow_anonymous: boolean;
-  payload: string;
-  paid_btn_name: PaidBtnName;
-  paid_btn_url: Url;
-  is_confirmed: boolean;
-}
-
-export interface CreateInvoiceResult {
-  invoiceId: number;
-  status: InvoiceStatus;
-  hash: string;
-  asset: CryptoCurrency;
-  amount: Money;
-  payUrl: Url,
-  description: string;
-  createdAt: Date;
-  allowComments: boolean;
-  allowAnonymous: boolean;
-  payload: any;
-  paidBtnName: PaidBtnName;
-  paidBtnUrl: Url;
-  isConfirmed: boolean;
-}
-
 export const allowedPaidBtnNames: PaidBtnName[] = [
   PaidBtnName.ViewItem,
   PaidBtnName.OpenChannel,
@@ -201,12 +168,12 @@ const maxPayloadByteSize = 1024;
 export async function createInvoice(
   options: CreateInvoiceOptions
 
-): Promise<HttpApiResponse<CreateInvoiceResult>> {
+): Promise<HttpApiResponse<Invoice>> {
 
   const {
     appToken,
     httpClient,
-    network = Network.Mainnet,
+    network = defaultNetwork,
 
   } = options;
 
@@ -270,7 +237,7 @@ export async function createInvoice(
   );
 
   // Request serialization
-  const requestData = omitEmptyProps<CreateInvoiceRequest>({
+  const body = omitEmptyProps<CreateInvoiceRequest>({
     asset: params.asset,
     amount: params.amount.toString(),
     description: params.description,
@@ -283,39 +250,20 @@ export async function createInvoice(
 
   const response = await makeRequest<
     CreateInvoiceRequest,
-    CreateInvoiceResponse
+    InvoiceResponse
   >({
     appToken,
     httpClient,
     methodName: 'createInvoice',
-    requestData,
+    body,
     httpMethod: HttpRequestMethod.Post,
     network,
   });
 
   // Deserializing server response
-  return transformResponse(response, result => ({
-    invoiceId: result.invoice_id,
-    status: result.status,
-    hash: result.hash,
-    asset: result.asset,
-    amount: parseMoney(result.amount),
-    payUrl: result.pay_url,
-    description: result.description,
-    createdAt: (result.created_at
-      ? new Date(result.created_at)
-      : undefined
-    ),
-    allowComments: result.allow_comments,
-    allowAnonymous: result.allow_anonymous,
-    payload: (result.payload
-      ? JSON.parse(result.payload)
-      : undefined
-    ),
-    paidBtnName: result.paid_btn_name,
-    paidBtnUrl: result.paid_btn_url,
-    isConfirmed: result.is_confirmed,
-  }));
+  return transformResponse(response, (
+    result => parseInvoiceResponse(result)
+  ));
 
 }
 

@@ -1,8 +1,9 @@
 
 import { HttpClient, HttpRequestMethod } from '../../http-client/http-client';
 import { HttpApiResponse, makeRequest } from '../common/make-request';
+import { Network } from '../common/network';
 import { transformResponse } from '../common/transform-response';
-import { AppToken, BotUsername, Network } from '../common/types';
+import { AppToken, BotUsername} from '../common/types';
 
 
 export interface GetMeRequestOptions {

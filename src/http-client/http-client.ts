@@ -1,8 +1,9 @@
 
-export interface HttpRequest<PayloadType = any> {
+export interface HttpRequest<BodyType = any> {
   url: string;
   method?: HttpRequestMethod;
-  payload?: PayloadType;
+  query?: Record<string, any>;
+  body?: BodyType;
   headers?: Record<string, string | string[]>;
 }
 

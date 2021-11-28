@@ -1,7 +1,7 @@
 
 import { HttpRequest, HttpRequestMethod, HttpResponse } from '../../http-client/http-client';
 import { MockHttpClient } from '../../http-client/mock-http-client';
-import { Network } from '../common/types';
+import { Network } from '../common/network';
 import { getExchangeRates } from './get-exchange-rates';
 
 

@@ -1,15 +1,16 @@
 
 import { HttpRequest, HttpRequestMethod, HttpResponse } from '../../http-client/http-client';
 import { MockHttpClient } from '../../http-client/mock-http-client';
+import { HttpApiResponse } from '../common/make-request';
 import { Network } from '../common/network';
-import { getMe } from './get-me';
+import { getInvoices, GetInvoicesResponse } from './get-invoices';
 
 
 // noinspection SpellCheckingInspection
 const testToken = '1234:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 
 
-describe('getMe()', () => {
+describe('getInvoices()', () => {
 
   it(`should use GET HTTP method`, async () => {
 
@@ -22,8 +23,8 @@ describe('getMe()', () => {
   describe(`should use correct URL`, () => {
 
     const networks: [Network, string][] = [
-      [Network.Mainnet, `https://pay.crypt.bot/app${testToken}/getMe`],
-      [Network.Testnet, `https://testnet-pay.crypt.bot/app${testToken}/getMe`],
+      [Network.Mainnet, `https://pay.crypt.bot/app${testToken}/getInvoices`],
+      [Network.Testnet, `https://testnet-pay.crypt.bot/app${testToken}/getInvoices`],
     ];
 
     for (const [network, expectedUrl] of networks) {
@@ -48,9 +49,15 @@ describe('getMe()', () => {
   }> {
 
     const {
-      response = {
+      response = <HttpApiResponse<GetInvoicesResponse>> {
         status: 200,
-        payload: { ok: true, result: [] },
+        payload: {
+          ok: true,
+          result: {
+            count: 0,
+            items: [],
+          },
+        },
       },
       network,
 
@@ -58,7 +65,7 @@ describe('getMe()', () => {
 
     const httpClient = new MockHttpClient(response);
 
-    await getMe({
+    await getInvoices({
       appToken: testToken,
       httpClient: httpClient,
       network,

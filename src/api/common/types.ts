@@ -1,13 +1,10 @@
 
+import { Network } from './network';
+
 
 export type Url = string;
 
 export type AppToken = string;
-
-export enum Network {
-  Mainnet = 'mainnet',
-  Testnet = 'testnet',
-}
 
 export type InvoiceId = number;
 

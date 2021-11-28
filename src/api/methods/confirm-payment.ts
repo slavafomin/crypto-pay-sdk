@@ -1,4 +1,7 @@
 
+import { InvoiceId } from '../common/invoice';
+
+
 export interface ConfirmPaymentRequestOptions {
   params: ConfirmPaymentParams;
 }
@@ -17,7 +20,7 @@ export interface ConfirmPaymentRequest {
   /**
    * Invoice ID you want to confirm.
    */
-  invoice_id: number;
+  invoice_id: InvoiceId;
 
 }
 
