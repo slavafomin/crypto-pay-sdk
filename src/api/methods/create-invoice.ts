@@ -54,6 +54,18 @@ export interface CreateInvoiceParams {
    */
   payload?: string;
 
+  /**
+   * Optional. Allow adding comments when paying an invoice.
+   * Default is true.
+   */
+  allowComments?: boolean;
+
+  /**
+   * Optional. Allow pay invoice as anonymous.
+   * Default is true.
+   */
+  allowAnonymous?: boolean;
+
 }
 
 export interface CreateInvoiceRequest {
@@ -93,6 +105,18 @@ export interface CreateInvoiceRequest {
    * you want to attach to the invoice (up to 1 KB).
    */
   payload?: string;
+
+  /**
+   * Optional. Allow adding comments when paying an invoice.
+   * Default is true.
+   */
+  allow_comments?: boolean;
+
+  /**
+   * Optional. Allow pay invoice as anonymous.
+   * Default is true.
+   */
+  allow_anonymous?: boolean;
 
 }
 
@@ -193,7 +217,16 @@ export async function createInvoice(
 
     payload: Joi.string()
       .optional()
-      .max(maxPayloadByteSize, 'utf8')
+      .max(maxPayloadByteSize, 'utf8'),
+
+    allowComments: Joi.boolean()
+      .optional()
+      .default(true),
+
+    allowAnonymous: Joi.boolean()
+      .optional()
+      .default(true),
+
   });
 
   let validationResult;
@@ -223,7 +256,11 @@ export async function createInvoice(
 
   }
 
-  const { value: params, warning, debug } = validationResult;
+  const { warning, debug } = validationResult;
+
+  const params: CreateInvoiceParams = (
+    validationResult.value
+  );
 
   console.log({ params, warning, debug });
 
@@ -235,6 +272,8 @@ export async function createInvoice(
     paid_btn_name: params.paidBtnName,
     paid_btn_url: params.paidBtnUrl,
     payload: params.payload,
+    allow_comments: params.allowComments,
+    allow_anonymous: params.allowAnonymous,
   });
 
   const response = await httpClient
