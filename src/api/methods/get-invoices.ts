@@ -5,12 +5,21 @@ import { omitEmptyProps } from '../../common/utils';
 import { HttpClient, HttpRequestMethod } from '../../http-client/http-client';
 import { supportedAssets } from '../common/assets';
 import { CryptoCurrency } from '../common/currencies';
-import { Invoice, InvoiceResponse, InvoiceStatus, invoiceStatuses, parseInvoiceResponse } from '../common/invoice';
 import { HttpApiResponse, makeRequest } from '../common/make-request';
 import { defaultNetwork, Network } from '../common/network';
 import { PaginationParams, paginationSerializers, paginationValidators } from '../common/pagination';
 import { transformResponse } from '../common/transform-response';
 import { AppToken, InvoiceId} from '../common/types';
+
+import {
+  Invoice,
+  invoiceIdValidator,
+  InvoiceResponse,
+  InvoiceStatus,
+  invoiceStatuses,
+  parseInvoiceResponse,
+
+} from '../common/invoice';
 
 
 export interface GetInvoicesRequestOptions {
@@ -91,9 +100,8 @@ export async function getInvoices(
     invoiceIds: Joi.array()
       .optional()
       .items(
-        Joi.number()
+        invoiceIdValidator
           .required()
-          .greater(0)
       ),
 
     status: Joi.string()
