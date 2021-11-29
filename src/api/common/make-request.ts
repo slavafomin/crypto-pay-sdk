@@ -50,7 +50,7 @@ export async function makeRequest<RequestType, ResponseType>(options: {
     })
   ;
 
-  const { status, payload } = response;
+  const { payload } = response;
 
   if (isSuccessResponse(response)) {
     return response;

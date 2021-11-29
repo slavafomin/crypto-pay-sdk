@@ -1,7 +1,7 @@
 
 import Joi from 'joi';
 
-import { omitEmptyProps } from '../../common/utils';
+import { omitEmptyProps } from '../common/utils';
 import { HttpClient, HttpRequestMethod } from '../../http-client/http-client';
 import { supportedAssets } from '../common/assets';
 import { CryptoCurrency } from '../common/currencies';
@@ -9,10 +9,11 @@ import { HttpApiResponse, makeRequest } from '../common/make-request';
 import { defaultNetwork, Network } from '../common/network';
 import { PaginationParams, paginationSerializers, paginationValidators } from '../common/pagination';
 import { transformResponse } from '../common/transform-response';
-import { AppToken, InvoiceId} from '../common/types';
+import { AppToken } from '../common/types';
 
 import {
   Invoice,
+  InvoiceId,
   invoiceIdValidator,
   InvoiceResponse,
   InvoiceStatus,

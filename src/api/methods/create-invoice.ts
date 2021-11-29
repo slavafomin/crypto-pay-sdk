@@ -2,7 +2,7 @@
 import Joi from 'joi';
 import { TextEncoder } from 'util';
 
-import { omitEmptyProps } from '../../common/utils';
+import { omitEmptyProps } from '../common/utils';
 import { HttpClient, HttpRequestMethod } from '../../http-client/http-client';
 import { supportedAssets } from '../common/assets';
 import { CryptoCurrency } from '../common/currencies';

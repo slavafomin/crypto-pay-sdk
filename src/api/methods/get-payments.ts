@@ -1,7 +1,7 @@
 
 import Joi from 'joi';
 
-import { omitEmptyProps } from '../../common/utils';
+import { omitEmptyProps } from '../common/utils';
 import { HttpClient, HttpRequestMethod } from '../../http-client/http-client';
 import { Invoice, InvoiceResponse, parseInvoiceResponse } from '../common/invoice';
 import { HttpApiResponse, makeRequest } from '../common/make-request';

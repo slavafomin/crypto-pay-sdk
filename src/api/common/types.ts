@@ -6,8 +6,6 @@ export type Url = string;
 
 export type AppToken = string;
 
-export type InvoiceId = number;
-
 export enum BotUsername {
   CryptoTestnetBot = 'CryptoTestnetBot',
   CryptoBot = 'CryptoBot',
