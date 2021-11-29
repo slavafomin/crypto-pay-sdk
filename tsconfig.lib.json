@@ -1,22 +1,11 @@
 {
+  "extends": "./tsconfig.node.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "target": "ES2017",
     "rootDir": "src/",
     "outDir": "dist/",
     "declarationDir": "dist/types/",
     "removeComments": true,
-    "lib": [
-      "ESNext"
-    ],
-    "skipLibCheck": true,
     "sourceMap": true,
-    "esModuleInterop": true,
-    "typeRoots": [
-      "node_modules/@types",
-      "types"
-    ],
     "noEmitOnError": true,
     "declaration": true
   },

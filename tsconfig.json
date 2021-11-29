@@ -1,18 +1,5 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "target": "ES2017",
-    "lib": [
-      "ESNext"
-    ],
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "typeRoots": [
-      "node_modules/@types",
-      "types"
-    ]
-  },
+  "extends": "./tsconfig.node.json",
   "files": [
     "jest.config.ts"
   ]
