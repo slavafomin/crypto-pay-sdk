@@ -78,7 +78,6 @@ describe('createInvoice()', () => {
       params: {
         asset: CryptoCurrency.ETH,
         amount: 100,
-        paidBtnUrl: `https://example.com`,
       }
     });
 
@@ -138,7 +137,7 @@ describe('createInvoice()', () => {
 
   });
 
-  describe('paidBtnUrl should be set', () => {
+  describe('paidBtnUrl should be set…', () => {
 
     const cases: PaidBtnName[] = [
       PaidBtnName.ViewItem,
@@ -148,7 +147,7 @@ describe('createInvoice()', () => {
     ];
 
     for (const paidBtnName of cases) {
-      it(`when paidBtnName is equal to "${paidBtnName}"`, async () => {
+      it(`…when paidBtnName is equal to "${paidBtnName}"`, async () => {
         await expect(makeCall({
           params: {
             asset: CryptoCurrency.TON,
@@ -161,21 +160,15 @@ describe('createInvoice()', () => {
 
   });
 
-  // @todo
-  it.skip(
-    `paidBtnUrl must not be set when paidBtnName ` +
-    `is equal to "${PaidBtnName.Callback}"`,
-    async () => {
-      await expect(makeCall({
-        params: {
-          asset: CryptoCurrency.TON,
-          amount: 100,
-          paidBtnName: PaidBtnName.Callback,
-          paidBtnUrl: 'https://example.com',
-        }
-      })).rejects.toThrow(/"paidBtnUrl" is not allowed/);
-    })
-  ;
+  it(`paidBtnUrl must not be set when paidBtnName is not set`, async () => {
+    await expect(makeCall({
+      params: {
+        asset: CryptoCurrency.TON,
+        amount: 100,
+        paidBtnUrl: 'https://example.com',
+      }
+    })).rejects.toThrow(/"paidBtnUrl" is not allowed/);
+  });
 
   it(`paidBtnUrl must start with http or https`, async () => {
     await expect(makeCall({
@@ -195,7 +188,6 @@ describe('createInvoice()', () => {
       params: {
         asset: CryptoCurrency.TON,
         amount: 100,
-        paidBtnUrl: `https://example.com`,
         payload: 'Ы'.repeat(511) + 'A',
       }
     })).rejects.toThrow(
@@ -213,7 +205,6 @@ describe('createInvoice()', () => {
       params: {
         asset: CryptoCurrency.TON,
         amount: 100,
-        paidBtnUrl: `https://example.com`,
         payload,
       }
     });
@@ -232,12 +223,10 @@ describe('createInvoice()', () => {
       { this: { is: { a: { test: 'payload' } }} }
     );
 
-
     const { result } = await makeCall({
       params: {
         asset: CryptoCurrency.TON,
         amount: 100,
-        paidBtnUrl: `https://example.com`,
       },
       response: {
         status: 200,
@@ -281,7 +270,6 @@ describe('createInvoice()', () => {
       params = {
         asset: CryptoCurrency.TON,
         amount: 100.25,
-        paidBtnUrl: `https://example.com`,
       },
 
     } = (options || {});

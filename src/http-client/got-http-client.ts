@@ -1,12 +1,36 @@
 
 import got from 'got';
+import { RequiredRetryOptions } from 'got/dist/source/core';
 
 import { HttpClient, HttpRequest, HttpResponse } from './http-client';
 
+export type RetryConfig = (
+  Partial<RequiredRetryOptions> | number
+);
 
 export interface GotHttpClientOptions {
+
   got: typeof got;
+
+  /**
+   * Number of milliseconds after which HTTP request
+   * will be considered timed out.
+   *
+   * Default is: 10 seconds
+   */
+  timeout?: number;
+
+  /**
+   * Got client retry configuration.
+   *
+   * See the following page for more details:
+   * https://github.com/sindresorhus/got/blob/main/documentation/7-retry.md
+   */
+  retry?: RetryConfig;
+
 }
+
+const defaultTimeout = 10 * 1000; // 10 secs
 
 
 /**
@@ -28,7 +52,12 @@ export class GotHttpClient implements HttpClient {
 
   ): Promise<HttpResponse<ResponsePayloadType>> {
 
-    const { got } = this.options;
+    const {
+      got,
+      timeout = defaultTimeout,
+      retry,
+
+    } = this.options;
 
     const {
       url,
@@ -39,10 +68,6 @@ export class GotHttpClient implements HttpClient {
 
     } = options;
 
-    // @todo: handle retries and timeouts
-    // @todo: forbid redirects
-    // @todo: server authentication
-
     const response = await got<ResponsePayloadType>(url, {
       method,
       headers,
@@ -50,6 +75,13 @@ export class GotHttpClient implements HttpClient {
       json: body,
       responseType: 'json',
       throwHttpErrors: false,
+      timeout: {
+        request: timeout,
+      },
+      retry: retry || {
+        limit: 3,
+      },
+      followRedirect: false,
     });
 
     return {

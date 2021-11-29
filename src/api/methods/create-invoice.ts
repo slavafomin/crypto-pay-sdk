@@ -8,7 +8,7 @@ import { supportedAssets } from '../common/assets';
 import { CryptoCurrency } from '../common/currencies';
 import { Invoice, InvoiceResponse, parseInvoiceResponse } from '../common/invoice';
 import { HttpApiResponse, makeRequest } from '../common/make-request';
-import { Money, StringMoney } from '../common/money';
+import { Money, serializeMoney, StringMoney } from '../common/money';
 import { defaultNetwork, Network } from '../common/network';
 import { transformResponse } from '../common/transform-response';
 import { AppToken, Url } from '../common/types';
@@ -151,7 +151,7 @@ export enum PaidBtnName {
 
 }
 
-export const allowedPaidBtnNames: PaidBtnName[] = [
+export const paidBtnNames: PaidBtnName[] = [
   PaidBtnName.ViewItem,
   PaidBtnName.OpenChannel,
   PaidBtnName.OpenBot,
@@ -192,20 +192,14 @@ export async function createInvoice(
 
     paidBtnName: Joi.string()
       .optional()
-      .default(PaidBtnName.Callback)
       .valid(
-        ...allowedPaidBtnNames
+        ...paidBtnNames
       ),
 
     paidBtnUrl: Joi
       .when('paidBtnName', {
-        is: Joi.required().valid(
-          // @todo
-          PaidBtnName.ViewItem,
-          PaidBtnName.OpenChannel,
-          PaidBtnName.OpenBot,
-          PaidBtnName.Callback,
-        ),
+        is: Joi.string()
+          .required(),
         then: Joi.string()
           .required()
           .uri({
@@ -239,7 +233,7 @@ export async function createInvoice(
   // Request serialization
   const body = omitEmptyProps<CreateInvoiceRequest>({
     asset: params.asset,
-    amount: params.amount.toString(),
+    amount: serializeMoney(params.amount),
     description: params.description,
     paid_btn_name: params.paidBtnName,
     paid_btn_url: params.paidBtnUrl,

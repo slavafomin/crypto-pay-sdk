@@ -33,6 +33,7 @@ export {
 export {
   GotHttpClientOptions,
   GotHttpClient,
+  RetryConfig,
 
 } from './http-client/got-http-client';
 
@@ -147,7 +148,7 @@ export {
 export {
   PaidBtnName,
   CreateInvoiceParams,
-  allowedPaidBtnNames,
+  paidBtnNames,
   CreateInvoiceOptions,
   CreateInvoiceRequest,
   createInvoice,

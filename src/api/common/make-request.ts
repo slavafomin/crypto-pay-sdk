@@ -11,8 +11,6 @@ export type HttpApiResponse<Type> = HttpResponse<
   SuccessApiResponse<Type>
 >;
 
-// @todo: make sure `makeRequest` is used everywhere
-
 export async function makeRequest<RequestType, ResponseType>(options: {
   appToken: AppToken;
   httpClient: HttpClient;

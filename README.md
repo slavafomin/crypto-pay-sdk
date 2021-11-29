@@ -17,6 +17,14 @@ for notices regarding the API implementation.
 
 ## Features
 
+- @todo: timeouts, redirects, retries
+- @todo: tests, coverage
+- typescript
+- JOI
+- three API levels
+- camel case
+- serialization (e.g. payload, dates, money)
+
 …
 
 
@@ -26,6 +34,16 @@ for notices regarding the API implementation.
 
 
 ## Usage
+
+### Three API levels
+
+### Top level API
+
+### Middle level API
+
+### Low level API
+
+- @todo: token via env variable
 
 …
 
@@ -91,6 +109,12 @@ In order to run any example on your machine, do the following:
    Output of the executed requests will be logged
    to the terminal.
 
+
+## Security Considerations
+
+@todo: describe token in URL issue
+
+
 ## API
 
 …
@@ -103,7 +127,7 @@ In order to run any example on your machine, do the following:
 
 ## License (MIT)
 
-Copyright (c) 2021 Slava Fomin II
+Copyright © 2021 Slava Fomin II
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
