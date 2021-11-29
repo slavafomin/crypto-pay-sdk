@@ -36,7 +36,7 @@
     "got": "^11.8.3"
   },
   "dependencies": {
-    "got": "^11.8.3",
+    "decimal.js-light": "^2.5.1",
     "joi": "^17.4.2"
   },
   "devDependencies": {

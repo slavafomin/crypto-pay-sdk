@@ -3,7 +3,7 @@ import Joi from 'joi';
 
 import { PaidBtnName } from '../methods/create-invoice';
 import { CryptoCurrency } from './currencies';
-import { Money, parseMoney, StringMoney } from './money';
+import { Money, parseMoneyString, StringMoney } from './money';
 import { DateString, Url } from './types';
 
 
@@ -76,7 +76,7 @@ export function parseInvoiceResponse(
     status: response.status,
     hash: response.hash,
     asset: response.asset,
-    amount: parseMoney(response.amount),
+    amount: parseMoneyString(response.amount),
     payUrl: response.pay_url,
     description: response.description,
     createdAt: (response.created_at

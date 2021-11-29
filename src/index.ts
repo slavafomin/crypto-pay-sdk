@@ -89,9 +89,13 @@ export {
 } from './api/common/make-request';
 
 export {
-  Money,
-  parseMoney,
+  money,
   StringMoney,
+  Money,
+  parseMoneyString,
+  serializeMoney,
+  MoneyFromUser,
+  validateMoney,
 
 } from './api/common/money';
 

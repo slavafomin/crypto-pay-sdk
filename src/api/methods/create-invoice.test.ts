@@ -1,4 +1,6 @@
 
+import Decimal from 'decimal.js-light';
+
 import { HttpRequest, HttpRequestMethod } from '../../http-client/http-client';
 import { MockHttpClient } from '../../http-client/mock-http-client';
 import { CryptoCurrency } from '../common/currencies';
@@ -91,7 +93,7 @@ describe('createInvoice()', () => {
         amount: 0,
       }
 
-    })).rejects.toThrow(/"amount" must be greater than 0/);
+    })).rejects.toThrow(/"amount".*?must be greater than 0/);
 
   });
 
@@ -103,7 +105,46 @@ describe('createInvoice()', () => {
         amount: -100,
       }
 
-    })).rejects.toThrow(/"amount" must be greater than 0/);
+    })).rejects.toThrow(/"amount".*?must be greater than 0/);
+
+  });
+
+  it(`should accept Decimal values as amount`, async () => {
+
+    const { request } = await makeCall({
+      params: {
+        asset: CryptoCurrency.TON,
+        amount: new Decimal('100.500'),
+      }
+    });
+
+    expect(request.body.amount).toEqual('100.5');
+
+  });
+
+  it(`should accept string values as amount`, async () => {
+
+    const { request } = await makeCall({
+      params: {
+        asset: CryptoCurrency.TON,
+        amount: '225.524000',
+      }
+    });
+
+    expect(request.body.amount).toEqual('225.524');
+
+  });
+
+  it(`should accept number values as amount`, async () => {
+
+    const { request } = await makeCall({
+      params: {
+        asset: CryptoCurrency.TON,
+        amount: 225.524000,
+      }
+    });
+
+    expect(request.body.amount).toEqual('225.524');
 
   });
 

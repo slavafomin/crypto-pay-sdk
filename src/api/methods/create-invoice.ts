@@ -8,7 +8,7 @@ import { supportedAssets } from '../common/assets';
 import { CryptoCurrency } from '../common/currencies';
 import { Invoice, InvoiceResponse, parseInvoiceResponse } from '../common/invoice';
 import { HttpApiResponse, makeRequest } from '../common/make-request';
-import { Money, serializeMoney, StringMoney } from '../common/money';
+import { money, MoneyFromUser, serializeMoney, StringMoney, validateMoney } from '../common/money';
 import { defaultNetwork, Network } from '../common/network';
 import { transformResponse } from '../common/transform-response';
 import { AppToken, Url } from '../common/types';
@@ -31,7 +31,7 @@ export interface CreateInvoiceParams {
   /**
    * Amount of the invoice.
    */
-  amount: Money;
+  amount: MoneyFromUser;
 
   /**
    * Description of the invoice. Up to 1024 symbols.
@@ -182,9 +182,13 @@ export async function createInvoice(
       .required()
       .valid(...supportedAssets[network]),
 
-    amount: Joi.number()
-      .required()
-      .greater(0),
+    // Parsing the amount and checking
+    // if it's greater than zero,
+    // no permanent transformations are done
+    amount: Joi.required()
+      .custom(validateMoney({
+        greater: 0,
+      })),
 
     description: Joi.string()
       .optional()
@@ -233,7 +237,9 @@ export async function createInvoice(
   // Request serialization
   const body = omitEmptyProps<CreateInvoiceRequest>({
     asset: params.asset,
-    amount: serializeMoney(params.amount),
+    amount: serializeMoney(
+      money(params.amount)
+    ),
     description: params.description,
     paid_btn_name: params.paidBtnName,
     paid_btn_url: params.paidBtnUrl,
