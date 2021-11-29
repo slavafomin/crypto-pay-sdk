@@ -24,7 +24,7 @@ for notices regarding the API implementation.
 - three API levels
 - camel case
 - serialization (e.g. payload, dates, money)
-- decimal.js-light
+- decimal.js-light (https://modernweb.com/what-every-javascript-developer-should-know-about-floating-points/)
 
 …
 
