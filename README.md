@@ -30,26 +30,73 @@ for notices regarding the API implementation.
 …
 
 
+## Examples
+
+You can find a whole set of various usage examples in the
+[examples](./examples) directory of the library. There are
+three categories of examples:
+
+- [api-client](./examples/api-client)<br>
+  Top-level API layer that is the most user-friendly
+  and easy to use. Only domain data is returned
+  from the server.
+
+
+- [methods](./examples/methods)<br>
+  Middle-level API layer, all the API methods could be
+  executed directly, whole HTTP responses are returned.
+
+
+- [low-level](./examples/low-level)<br>
+  The most advanced and low-level API possible, you could
+  build entire requests manually with the help of the
+  building blocks provided by the library
+  (i.e. types, helper functions, etc).
+
+
+### Running examples
+
+In order to run any example on your machine, do the following:
+
+1. Clone the repository:
+   ```shell
+   git clone https://github.com/slavafomin/crypto-bot-sdk.git
+   cd ./crypto-bot-sdk
+   ```
+
+2. Install all the dependencies:
+   ```shell
+   npm install
+   ```
+
+3. Run the following command:
+   ```shell
+   CRYPTO_BOT_TOKEN={TOKEN} \
+   npx ts-node \
+     -P ./tsconfig.examples.json \
+     -r tsconfig-paths/register \
+     {PATH TO EXAMPLE}
+   ```
+
+   **Example:**
+
+   ```shell
+   CRYPTO_BOT_TOKEN=1234:AAAaaaAAAAAAaaaAAAAAAaaaAAAAAAaaaAA \
+   npx ts-node \
+     -P ./tsconfig.examples.json \
+     -r tsconfig-paths/register \
+     ./examples/api-client/create-invoice.ts
+   ```
+
+   Output of the executed requests will be logged
+   to the terminal.
+
 ## API
 
 …
 
 
 ## Contributing
-
-…
-
-
-## Notices
-
-- `payload` is less than `description` (in byte terms)
-
-- it is said that `paid_btn_name` has a `callback`
-  value by default, when in real life it has no value.
-  The result is different when `paid_btn_name` is omitted
-  from the request or when it explicitly set to `callback`.
-  In latter case the `PAID_BTN_URL_REQUIRED` error is raised
-  because it expects the `paid_btn_url` value.
 
 …
 
