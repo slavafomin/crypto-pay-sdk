@@ -115,6 +115,14 @@ In order to run any example on your machine, do the following:
 @todo: describe token in URL issue
 
 
+## Test Results
+
+Most of the library code is covered by unit tests,
+particularly the critical aspects of the API.
+
+![Test results](./assets/test-results.png "Test results")
+
+
 ## API
 
 …
