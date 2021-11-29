@@ -13,7 +13,7 @@ import { AppToken } from '../common/types';
 
 export interface GetPaymentsRequestOptions {
   appToken: AppToken;
-  params: GetPaymentsParams;
+  params?: GetPaymentsParams;
   httpClient: HttpClient;
   network?: Network;
 }
