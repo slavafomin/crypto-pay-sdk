@@ -22,11 +22,11 @@ import { appToken } from '../app-token';
   });
 
   try {
-    const response = await client.confirmPayment({
+    const invoice = await client.confirmPayment({
       invoiceId: 1065,
     });
 
-    console.log(JSON.stringify(response, null, 4));
+    console.log(JSON.stringify(invoice, null, 4));
 
   } catch (error) {
     console.error(error);

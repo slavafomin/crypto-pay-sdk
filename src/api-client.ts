@@ -2,6 +2,7 @@
 import { Invoice } from './api/common/invoice';
 import { defaultNetwork, Network } from './api/common/network';
 import { AppToken } from './api/common/types';
+import { confirmPaid, ConfirmPaidResult } from './api/helpers/confirm-paid';
 import { confirmPayment, ConfirmPaymentParams } from './api/methods/confirm-payment';
 import { createInvoice, CreateInvoiceParams } from './api/methods/create-invoice';
 import { getBalance, GetBalanceResult } from './api/methods/get-balance';
@@ -219,6 +220,41 @@ export class ApiClient {
     });
 
     return response.payload.result;
+
+  }
+
+  public async confirmPaid(options: {
+    limit?: number;
+    concurrency?: number;
+    handleConfirmation?: (
+      (confirmedInvoice: Invoice)
+        => (unknown | Promise<unknown>)
+    );
+
+  }): Promise<ConfirmPaidResult> {
+
+    const {
+      appToken,
+      httpClient,
+      network,
+
+    } = this.options;
+
+    const {
+      limit,
+      concurrency,
+      handleConfirmation,
+
+    } = options;
+
+    return confirmPaid({
+      appToken,
+      httpClient,
+      limit,
+      concurrency,
+      handleConfirmation,
+      network,
+    });
 
   }
 

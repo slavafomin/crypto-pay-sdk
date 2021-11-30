@@ -24,7 +24,7 @@ import { appToken } from '../app-token';
   });
 
   try {
-    const response = await client.createInvoice({
+    const invoice = await client.createInvoice({
       asset: CryptoCurrency.TON,
       amount: 1.22,
       description: `A test invoice for my cool application`,
@@ -35,7 +35,7 @@ import { appToken } from '../app-token';
       allowComments: false,
     });
 
-    console.log(JSON.stringify(response, null, 4));
+    console.log(JSON.stringify(invoice, null, 4));
 
   } catch (error) {
     console.error(error);

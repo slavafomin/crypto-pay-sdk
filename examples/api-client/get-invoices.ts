@@ -22,7 +22,7 @@ import { appToken } from '../app-token';
   });
 
   try {
-    const response = await client.getInvoices({
+    const { items: invoices, count } = await client.getInvoices({
       // asset: CryptoCurrency.TON,
       // invoiceIds: [1, 2, 3, 4],
       // status: InvoiceStatus.Paid,
@@ -30,7 +30,7 @@ import { appToken } from '../app-token';
       // count: 1000,
     });
 
-    console.log(JSON.stringify(response, null, 4));
+    console.log(JSON.stringify({ invoices, count }, null, 4));
 
   } catch (error) {
     console.error(error);

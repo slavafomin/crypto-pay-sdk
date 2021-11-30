@@ -22,12 +22,14 @@ import { appToken } from '../app-token';
   });
 
   try {
-    const response = await client.getPayments({
-      // offset: 100,
-      // count: 1000,
-    });
+    const { items: invoices, count } = (
+      await client.getPayments({
+        // offset: 100,
+        // count: 1000,
+      })
+    );
 
-    console.log(JSON.stringify(response, null, 4));
+    console.log(JSON.stringify({ invoices, count }, null, 4));
 
   } catch (error) {
     console.error(error);

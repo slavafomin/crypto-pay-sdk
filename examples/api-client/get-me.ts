@@ -22,9 +22,9 @@ import { appToken } from '../app-token';
   });
 
   try {
-    const response = await client.getMe();
+    const meResult = await client.getMe();
 
-    console.log(JSON.stringify(response, null, 4));
+    console.log(JSON.stringify(meResult, null, 4));
 
   } catch (error) {
     console.error(error);

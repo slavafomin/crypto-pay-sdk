@@ -22,9 +22,9 @@ import { appToken } from '../app-token';
   });
 
   try {
-    const response = await client.getExchangeRates();
+    const resultItems = await client.getExchangeRates();
 
-    console.log(JSON.stringify(response, null, 4));
+    console.log(JSON.stringify(resultItems, null, 4));
 
   } catch (error) {
     console.error(error);
