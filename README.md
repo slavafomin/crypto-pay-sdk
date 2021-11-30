@@ -322,7 +322,9 @@ In order to run any example on your machine, do the following:
 
 ## Security Considerations
 
-@todo: describe token in URL issue
+Be advised, that using app token in the endpoint URL is considered a security flaw with the possibility of very drastic consequences. The details could be found in the article: [App token in URL is unsafe](https://telegra.ph/App-token-in-URL-is-unsafe-11-30).
+
+**In order to mitigate the problem, make sure to never ever log HTTP requests made to the CryptoBot API server!**
 
 
 ## Test Results
