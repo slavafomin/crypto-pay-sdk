@@ -1,12 +1,24 @@
 
-![@crypto-pay/sdk](./assets/crypto-pay-beaver.png "@crypto-pay/sdk")
-
 <p align="center">
+  <img src="./assets/crypto-pay-beaver.png" alt="@crypto-pay/sdk" title="@crypto-pay/sdk" />
+  <br>
   Cover art is a courtesy of Lolita Filipskikh specially
   for the <code>@crypto-pay/sdk</code>.
 </p>
 
 # @crypto-pay/sdk
+
+---
+
+<!-- NPM Badge -->
+<a href="https://badge.fury.io/js/@crypto-pay%2Fsdk">
+  <img src="https://badge.fury.io/js/@crypto-pay%2Fsdk.svg" alt="npm version" height="18">
+</a>
+
+<!-- MIT License Badge -->
+<a href="https://opensource.org/licenses/MIT">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" height="20">
+</a>
 
 Node.js SDK for Telegram [CryptoBot][crypto-bot]
 ([CryptoPay API][crypto-pay-api]).
