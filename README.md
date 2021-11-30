@@ -36,7 +36,8 @@ for notices regarding the API implementation.
 
 - All the `snake_case` properties of the API data layer are **automatically converted to** `camelCase`, which is much better suited for JavaScript ecosystem and makes your code look clear and consistent,
 - As a bonus, additional helper functions are provided on top of the API to make your workflow extremely easy and simple,
-- Minimal possible dependencies (all are high quality ones) updated to the latest versions.
+- Minimal possible dependencies (all are high quality ones) updated to the latest versions,
+- Source maps for the library is generated and provided to you for easier debugging.
 
 ## Install
 
