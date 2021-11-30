@@ -25,6 +25,10 @@
     "ton"
   ],
   "license": "MIT",
+  "homepage": "https://github.com/slavafomin/crypto-bot-sdk#readme",
+  "bugs": {
+    "url": "https://github.com/slavafomin/crypto-pay-sdk/issues"
+  },
   "author": {
     "name": "Slava Fomin II",
     "email": "slava@fomin.io",
@@ -33,6 +37,9 @@
   "engines": {
     "node": ">=12"
   },
+  "files": [
+    "dist/"
+  ],
   "peerDependencies": {
     "got": "^11.8.3"
   },
