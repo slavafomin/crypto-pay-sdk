@@ -25,8 +25,8 @@ import { appToken } from '../app-token';
 
   try {
     const response = await client.createInvoice({
-      asset: CryptoCurrency.ETH,
-      amount: 5.33,
+      asset: CryptoCurrency.TON,
+      amount: 1.22,
       description: `A test invoice for my cool application`,
       paidBtnUrl: `https://example.com`,
       payload: { an: { example: { payload: ["object"] } } },

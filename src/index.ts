@@ -216,3 +216,14 @@ export {
   getPayments,
 
 } from './api/methods/get-payments';
+
+
+//=========//
+// HELPERS //
+//=========//
+
+export {
+  confirmPaid,
+  ConfirmPaidResult,
+
+} from './api/helpers/confirm-paid';

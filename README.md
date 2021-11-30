@@ -25,6 +25,7 @@ for notices regarding the API implementation.
 - camel case
 - serialization (e.g. payload, dates, money)
 - decimal.js-light (https://modernweb.com/what-every-javascript-developer-should-know-about-floating-points/)
+- helper functions on top of API methods
 
 …
 
@@ -45,6 +46,7 @@ for notices regarding the API implementation.
 ### Low level API
 
 - @todo: token via env variable
+- @todo: confirm paid
 
 …
 

@@ -37,7 +37,8 @@
   },
   "dependencies": {
     "decimal.js-light": "^2.5.1",
-    "joi": "^17.4.2"
+    "joi": "^17.4.2",
+    "p-limit": "^3.1.0"
   },
   "devDependencies": {
     "@types/jest": "^27.0.3",
