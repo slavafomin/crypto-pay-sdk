@@ -38,6 +38,7 @@
     "node": ">=12"
   },
   "files": [
+    "assets/crypto-pay-beaver.png",
     "dist/"
   ],
   "peerDependencies": {

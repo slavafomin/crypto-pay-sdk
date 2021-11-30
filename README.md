@@ -1,4 +1,9 @@
 
+<p align="center">
+  <img src="./assets/crypto-pay-beaver.png" alt="@crypto-pay/sdk" title="@crypto-pay/sdk" />
+  Cover art is a courtesy of Lolita Filipskikh specially for the <code>@crypto-pay/sdk</code>
+</p>
+
 # @crypto-pay/sdk
 
 Node.js SDK for Telegram [CryptoBot][crypto-bot]
@@ -35,9 +40,9 @@ for notices regarding the API implementation.
   - monetary values are parsed using the [decimal.js-light](https://github.com/MikeMcl/decimal.js-light) library for safety purposes,
 
 - All the `snake_case` properties of the API data layer are **automatically converted to** `camelCase`, which is much better suited for JavaScript ecosystem and makes your code look clear and consistent,
-- As a bonus, additional helper functions are provided on top of the API to make your workflow extremely easy and simple,
-- Minimal possible dependencies (all are high quality ones) updated to the latest versions,
-- Source maps for the library is generated and provided to you for easier debugging.
+- As a bonus, **additional helper functions** are provided on top of the API to make your workflow extremely easy and simple,
+- **Minimal possible dependencies** (all are high quality ones) updated to the latest versions,
+- **Source maps** for the library is generated and provided to you for easier debugging.
 
 ## Install
 
@@ -87,39 +92,39 @@ import {
   // Instantiate the API client class, your gateway
   // to interacting with the CryptoBot API
   const client = new ApiClient({
-      
+
     // Pass the app token here directly or use the
     // CRYPTO_BOT_TOKEN environment variable (recommended)
     // appToken: '<token>',
     httpClient,
-      
+
     // Here we are using the "testnet" network,
     // "mainnet" will be used by default
     network: Network.Testnet,
-      
+
   });
 
   try {
     // Now, you can use any API methods that you want,
     // no further configuration is required.
-      
+
     // Here, I'm going to create a new invoice.
     // The method will return a Promise that needs to be awaited for:
     const invoice = await client.createInvoice({
-        
+
       // All the possible values for certain properties are provided
       // for you via helpful enumerations, no ned to guess:
       asset: CryptoCurrency.TON,
-        
+
       // You can specify the "amount" in any format that you like,
       // e.g. "string", "number" or Decimal from decimal.js library,
       // it will be automatically converted to the proper format
       amount: '1.22',
-        
+
       description: `A test invoice for my cool application`,
       paidBtnName: PaidBtnName.ViewItem,
       paidBtnUrl: `https://example.com`,
-        
+
       // You can specify "payload" as any combination of the primitive values
       // it will be serialized and deserialized to and from the JSON string automatically
       payload: {
@@ -130,7 +135,7 @@ import {
         userId: 100500,
         shouldNotifyByEmail: true
       },
-        
+
       allowAnonymous: true,
       allowComments: false,
     });
@@ -138,7 +143,7 @@ import {
     // Now, you can work with the Invoice object
     // returned from the server as you see fit:
     console.log(JSON.stringify(invoice, null, 4));
-      
+
     console.log(
       `Visit the following URL to pay for the order: ${invoice.payUrl}`
     );
@@ -190,6 +195,9 @@ import { appToken } from '../app-token';
   const httpClient = new GotHttpClient({ got });
 
   try {
+    // You call the API method directly, no need to create ApiClient instance.
+    // All the parameters are the same as privously described.
+    // Response is an HTTP response object instead of the domain model object:
     const response = await createInvoice({
       appToken,
       params: {
@@ -256,20 +264,20 @@ three categories of examples:
 In order to run any example on your machine, do the following:
 
 1. **Clone the repository:**
-   
+
    ```shell
    git clone https://github.com/slavafomin/crypto-bot-sdk.git
    cd ./crypto-bot-sdk
    ```
-   
+
 2. **Install all the dependencies:**
-   
+
    ```shell
    npm install
    ```
-   
+
 3. **Run the following command:**
-   
+
    ```shell
    CRYPTO_BOT_TOKEN={TOKEN} \
    npx ts-node \
@@ -277,9 +285,9 @@ In order to run any example on your machine, do the following:
      -r tsconfig-paths/register \
      {PATH TO EXAMPLE}
    ```
-   
+
    **Example:**
-   
+
    ```shell
    CRYPTO_BOT_TOKEN=1234:AAAaaaAAAAAAaaaAAAAAAaaaAAAAAAaaaAA \
    npx ts-node \
@@ -287,7 +295,7 @@ In order to run any example on your machine, do the following:
      -r tsconfig-paths/register \
      ./examples/api-client/create-invoice.ts
    ```
-   
+
    Output of the executed requests will be logged
    to the terminal.
 
