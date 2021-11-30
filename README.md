@@ -245,8 +245,87 @@ import { appToken } from '../app-token';
 
 ### Low level API
 
-- @todo: token via env variable
-- @todo: confirm paid
+Low-level API gives you access to all the building blocks of the library, including all the interfaces, types, enumerations, constant values and low-level helper functions.
+
+The example below shows you how you can make API request manually, without using the HTTP client implementation provided by the library or calling any ready made request functions:
+
+```typescript
+import got from 'got';
+
+import {
+  ApiResponse,
+  CreateInvoiceRequest,
+  CryptoCurrency,
+  FailedApiResponse,
+  getEndpointUrl,
+  InvoiceResponse,
+  Network,
+  PaidBtnName,
+
+} from '@crypto-pay/sdk';
+
+
+(async () => {
+
+  // This is the raw API request
+  const apiRequest: CreateInvoiceRequest = {
+    asset: CryptoCurrency.ETH,
+    amount: '5.33',
+    description: `A test invoice for my cool application`,
+    paid_btn_url: `https://example.com`,
+    payload: JSON.stringify({ an: { example: { payload: ["object"] } } }),
+    paid_btn_name: PaidBtnName.ViewItem,
+    allow_anonymous: true,
+    allow_comments: false,
+  };
+
+  // Using helper function to build the endpoint URL
+  // and to put token in it
+  const endpointUrl = getEndpointUrl({
+    appToken: '<token>',
+    method: 'createInvoice',
+    network: Network.Testnet,
+  });
+
+  type ResponseType = ApiResponse<InvoiceResponse>;
+
+  try {
+    // Using Got HTTP library directly to make a request,
+    // but you can use any library you want
+    const { statusCode, body } = await got<ResponseType>(endpointUrl, {
+      method: 'POST',
+      json: apiRequest,
+      responseType: 'json',
+      throwHttpErrors: false,
+    });
+
+    // Checking the low-level response
+    if (!body.ok) {
+      const { error } = (body as FailedApiResponse);
+      throw new Error(
+        `Request failed: ${error.name} (status = ${error.code})`
+      );
+    }
+
+    // Parsing the payload manully
+    const payload = JSON.parse(body.result.payload);
+
+    console.log(JSON.stringify({
+      statusCode,
+      body,
+      payload,
+
+    }, null, 4));
+
+  } catch (error) {
+    console.error(error);
+
+  }
+
+})();
+```
+
+
 
 ### Handling monetary values
 
