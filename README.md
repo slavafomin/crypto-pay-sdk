@@ -42,7 +42,7 @@ I've decided to spend more time to implement useful features ;)
 - A **complete Node.js compatible implementation** of the entire CryptoPay API as specified in its [documentation][crypto-pay-api],
 
 - **All LTS Node.js versions are supported** (starting from Node 12),
-- **HTTP-transport agnostic:** provides implementation of the [Got HTTP](https://github.com/sindresorhus/got) client, but allows use to use any library you want thanks to the [dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle),
+- **HTTP-transport agnostic:** provides implementation of the [Got HTTP](https://github.com/sindresorhus/got) client, but allows you to use any library you want, thanks to the [dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle),
 
 - Build-in HTTP client supports **automatic time-outs**, **request retries** and **prevents server-side redirects** for security purposes,
 - **Written completely in TypeScript** from scratch in a very strict manner with 100% type coverage (and no *any*'s), ensuring that the library code is correct (type safe) by itself and also **provides high quality typing declarations** to make sure that your code is also correct and type safe,
