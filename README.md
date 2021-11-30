@@ -254,6 +254,77 @@ Working with floating-point (decimal) numbers in JavaScript is not a trivial iss
 
 In short, in order to prevent all possible conundrum related to decimal values (especially data loss and incorrect rounding) when working with monetary values (like prices) we would always return an instance of `Decimal` from [decimal.js-light](https://github.com/MikeMcl/decimal.js-light) library. Of course, you can specify monetary values in any format that you like (e.g. "string" or "number") when calling our library, but we would highly recommend you to also use `Decimals` whenever possible.
 
+### Confirming paid invoices
+
+The library provides a useful `confirmPaid()` helper method for payment confirmation workflow: it will automatically fetch the recently paid invoices and will confirm them one-by-one in parallel. You can provide a function that will be called for each confirmed invoice. The list of all the confirmed invoices will be returned in the end. The function will respect limits and concurrency options that you can specify.
+
+```typescript
+
+import got from 'got';
+
+import {
+  ApiClient,
+  GotHttpClient,
+  Network,
+
+} from '@crypto-pay/sdk';
+
+
+(async () => {
+
+  const httpClient = new GotHttpClient({ got });
+
+  const client = new ApiClient({
+    httpClient,
+    network: Network.Testnet,
+  });
+
+  try {
+    const { confirmedPayments } = await client.confirmPaid({
+      
+      // This is the number of invoices that will
+      // be requested from the server in one go:
+      limit: 100,
+        
+      // This is a number of invoies that
+      // can be processed in parallel:
+      concurrency: 10,
+        
+      // This function will be called for each confirmed invoice
+      handleConfirmation: async invoice => {
+          
+        console.log(
+          `Invoice #${invoice.invoiceId} is confirmed!`
+        );
+          
+        // Your function could be asynchronous,
+        // just return a Promise and the library will wait
+        // for your function to complete
+        // (respecting the concurrency limits).
+        await sleep(2000);
+          
+      },
+        
+    });
+
+    // All the confirmed invoices will be returned in the end
+    console.log(
+      `The following invoices were confirmed: ` +
+      confirmedPayments
+        .map(invoice => invoice.invoiceId)
+        .join(', ')
+    );
+
+  } catch (error) {
+    console.error(error);
+
+  }
+
+})();
+```
+
+
+
 
 ## Examples
 
