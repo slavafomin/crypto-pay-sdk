@@ -1,6 +1,6 @@
 {
   "name": "@crypto-pay/sdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Node.js SDK for Telegram CryptoBot (CryptoPay API)",
   "scripts": {
     "build": "rm -rf ./dist && tsc -p ./tsconfig.lib.json",
