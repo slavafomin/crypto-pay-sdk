@@ -32,6 +32,9 @@ _(this section will be deleted after the contest)_
 See the [Crypto Pay API Review](https://telegra.ph/Crypto-Pay-API-Review-11-28)
 for notices regarding the API implementation.
 
+Sadly, I don't have enough time to finish the documentation,
+I've decided to spend more time to implement useful features ;)
+
 ---
 
 ## Features
@@ -244,9 +247,12 @@ import { appToken } from '../app-token';
 
 - @todo: token via env variable
 - @todo: confirm paid
-- @todo: decimal.js-light (https://modernweb.com/what-every-javascript-developer-should-know-about-floating-points/)
 
-…
+### Handling monetary values
+
+Working with floating-point (decimal) numbers in JavaScript is not a trivial issue! Just read this amazing article: [What Every JavaScript Developer Should Know About Floating Points](https://modernweb.com/what-every-javascript-developer-should-know-about-floating-points/) by *Xuanyi Chew* to understand the problem better.
+
+In short, in order to prevent all possible conundrum related to decimal values (especially data loss and incorrect rounding) when working with monetary values (like prices) we would always return an instance of `Decimal` from [decimal.js-light](https://github.com/MikeMcl/decimal.js-light) library. Of course, you can specify monetary values in any format that you like (e.g. "string" or "number") when calling our library, but we would highly recommend you to also use `Decimals` whenever possible.
 
 
 ## Examples
