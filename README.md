@@ -1,7 +1,9 @@
 
+![@crypto-pay/sdk](./assets/crypto-pay-beaver.png "@crypto-pay/sdk")
+
 <p align="center">
-  <img src="./assets/crypto-pay-beaver.png" alt="@crypto-pay/sdk" title="@crypto-pay/sdk" />
-  Cover art is a courtesy of Lolita Filipskikh specially for the <code>@crypto-pay/sdk</code>
+  Cover art is a courtesy of Lolita Filipskikh specially
+  for the <code>@crypto-pay/sdk</code>.
 </p>
 
 # @crypto-pay/sdk
