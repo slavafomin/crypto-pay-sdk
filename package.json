@@ -4,6 +4,7 @@
   "description": "Node.js SDK for Telegram CryptoBot (CryptoPay API)",
   "scripts": {
     "build": "tsc -p ./tsconfig.lib.json",
+    "prepublishOnly": "npm rnu build",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },

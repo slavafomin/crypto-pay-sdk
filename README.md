@@ -35,7 +35,8 @@ for notices regarding the API implementation.
   - monetary values are parsed using the [decimal.js-light](https://github.com/MikeMcl/decimal.js-light) library for safety purposes,
 
 - All the `snake_case` properties of the API data layer are **automatically converted to** `camelCase`, which is much better suited for JavaScript ecosystem and makes your code look clear and consistent,
-- As a bonus, additional helper functions are provided on top of the API to make your workflow extremely easy and simple.
+- As a bonus, additional helper functions are provided on top of the API to make your workflow extremely easy and simple,
+- Minimal possible dependencies (all are high quality ones) updated to the latest versions.
 
 ## Install
 
@@ -58,8 +59,8 @@ This is the most simple and straightforward way to use the library and is recomm
 
 **Traits:**
 
-- enables central configuration of all the common library options (i.e. network, token, etc)
-- returns the domain data directly, doesn't provide access to the HTTP responses
+- `(+)` enables central configuration of all the common library options (i.e. network, token, etc), which eliminates boilerplate,
+- `(—)` returns the domain data directly, doesn't provide access to the HTTP responses
 
 **Usage example**
 
@@ -158,7 +159,63 @@ You will need to at least specify an implementation of the HTTP client. We provi
 
 ### Middle level API
 
-…
+This abstraction level allows you to call each API method directly without using the `ApiClient` class. It gives you a little more control and response observability.
+
+**Traits:**
+
+- `(+)` gives you direct access to all the API methods with the single-call functional usage style,
+- `(—)` no central configuration, each API method must be configured individually leading to a repetitive code,
+- `(+)` returns HTTP responses, so you have access to entire response and all the data (e.g. status codes, headers, etc).
+
+**Usage example:**
+
+```typescript
+import got from 'got';
+
+import {
+  createInvoice,
+  CryptoCurrency,
+  GotHttpClient,
+  Network,
+  PaidBtnName,
+
+} from '@crypto-pay/sdk';
+
+import { appToken } from '../app-token';
+
+
+(async () => {
+
+  const httpClient = new GotHttpClient({ got });
+
+  try {
+    const response = await createInvoice({
+      appToken,
+      params: {
+        asset: CryptoCurrency.ETH,
+        amount: 5.33,
+        description: `A test invoice for my cool application`,
+        paidBtnUrl: `https://example.com`,
+        payload: { an: { example: { payload: ["object"] } } },
+        paidBtnName: PaidBtnName.ViewItem,
+        allowAnonymous: true,
+        allowComments: false,
+      },
+      httpClient,
+      network: Network.Testnet,
+    });
+
+    console.log(JSON.stringify(response.payload, null, 4));
+
+  } catch (error) {
+    console.error(error);
+
+  }
+
+})();
+```
+
+
 
 ### Low level API
 
