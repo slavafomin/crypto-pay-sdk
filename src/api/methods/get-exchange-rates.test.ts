@@ -22,8 +22,8 @@ describe('getExchangeRates()', () => {
   describe(`should use correct URL`, () => {
 
     const networks: [Network, string][] = [
-      [Network.Mainnet, `https://pay.crypt.bot/app${testToken}/getExchangeRates`],
-      [Network.Testnet, `https://testnet-pay.crypt.bot/app${testToken}/getExchangeRates`],
+      [Network.Mainnet, `https://pay.crypt.bot/api/getExchangeRates`],
+      [Network.Testnet, `https://testnet-pay.crypt.bot/api/getExchangeRates`],
     ];
 
     for (const [network, expectedUrl] of networks) {

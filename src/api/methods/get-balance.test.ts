@@ -22,8 +22,8 @@ describe('getBalance()', () => {
   describe(`should use correct URL`, () => {
 
     const networks: [Network, string][] = [
-      [Network.Mainnet, `https://pay.crypt.bot/app${testToken}/getBalance`],
-      [Network.Testnet, `https://testnet-pay.crypt.bot/app${testToken}/getBalance`],
+      [Network.Mainnet, `https://pay.crypt.bot/api/getBalance`],
+      [Network.Testnet, `https://testnet-pay.crypt.bot/api/getBalance`],
     ];
 
     for (const [network, expectedUrl] of networks) {

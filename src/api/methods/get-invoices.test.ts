@@ -23,8 +23,8 @@ describe('getInvoices()', () => {
   describe(`should use correct URL`, () => {
 
     const networks: [Network, string][] = [
-      [Network.Mainnet, `https://pay.crypt.bot/app${testToken}/getInvoices`],
-      [Network.Testnet, `https://testnet-pay.crypt.bot/app${testToken}/getInvoices`],
+      [Network.Mainnet, `https://pay.crypt.bot/api/getInvoices`],
+      [Network.Testnet, `https://testnet-pay.crypt.bot/api/getInvoices`],
     ];
 
     for (const [network, expectedUrl] of networks) {

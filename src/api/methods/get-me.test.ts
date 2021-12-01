@@ -22,8 +22,8 @@ describe('getMe()', () => {
   describe(`should use correct URL`, () => {
 
     const networks: [Network, string][] = [
-      [Network.Mainnet, `https://pay.crypt.bot/app${testToken}/getMe`],
-      [Network.Testnet, `https://testnet-pay.crypt.bot/app${testToken}/getMe`],
+      [Network.Mainnet, `https://pay.crypt.bot/api/getMe`],
+      [Network.Testnet, `https://testnet-pay.crypt.bot/api/getMe`],
     ];
 
     for (const [network, expectedUrl] of networks) {
