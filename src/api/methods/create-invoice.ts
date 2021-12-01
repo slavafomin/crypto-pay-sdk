@@ -158,7 +158,7 @@ export const paidBtnNames: PaidBtnName[] = [
   PaidBtnName.Callback,
 ];
 
-const maxPayloadByteSize = 1024;
+const maxPayloadByteSize = 4 * 1024; // 4 KB
 
 
 /**
