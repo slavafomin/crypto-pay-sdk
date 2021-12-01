@@ -3,6 +3,7 @@ import got from 'got';
 
 import {
   ApiResponse,
+  appTokenHeaderName,
   CreateInvoiceRequest,
   CryptoCurrency,
   FailedApiResponse,
@@ -30,7 +31,6 @@ import { appToken } from '../app-token';
   };
 
   const endpointUrl = getEndpointUrl({
-    appToken,
     method: 'createInvoice',
     network: Network.Testnet,
   });
@@ -43,6 +43,9 @@ import { appToken } from '../app-token';
       json: apiRequest,
       responseType: 'json',
       throwHttpErrors: false,
+      headers: {
+        [appTokenHeaderName]: appToken,
+      },
     });
 
     if (!body.ok) {
