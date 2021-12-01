@@ -37,13 +37,6 @@ export {
 
 } from './http-client/got-http-client';
 
-export {
-  endpointHostnames,
-  endpointUrlTemplate,
-  getEndpointUrl,
-
-} from './api/endpoint';
-
 
 //==============//
 // COMMON TYPES //
@@ -106,6 +99,14 @@ export {
 } from './api/common/network';
 
 export {
+  appTokenHeaderName,
+  endpointUrlTemplate,
+  getEndpointUrl,
+  endpointHostnames,
+
+} from './api/common/networking';
+
+export {
   PaginationParams,
   paginationSerializers,
   paginationValidators,
@@ -140,14 +141,6 @@ export {
 //=========//
 // METHODS //
 //=========//
-
-export {
-  ConfirmPaymentRequest,
-  ConfirmPaymentParams,
-  ConfirmPaymentRequestOptions,
-  confirmPayment,
-
-} from './api/methods/confirm-payment';
 
 export {
   PaidBtnName,
@@ -206,24 +199,3 @@ export {
   GetMeResponse,
 
 } from './api/methods/get-me';
-
-export {
-  GetPaymentsResponse,
-  GetPaymentsParams,
-  GetPaymentsResult,
-  GetPaymentsRequest,
-  GetPaymentsRequestOptions,
-  getPayments,
-
-} from './api/methods/get-payments';
-
-
-//=========//
-// HELPERS //
-//=========//
-
-export {
-  confirmPaid,
-  ConfirmPaidResult,
-
-} from './api/helpers/confirm-paid';

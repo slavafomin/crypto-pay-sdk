@@ -36,8 +36,6 @@ export interface InvoiceResponse {
   payload?: string;
   paid_btn_name: PaidBtnName;
   paid_btn_url: Url;
-  is_confirmed: boolean;
-  confirmed_at?: DateString;
 }
 
 export interface Invoice {
@@ -57,8 +55,6 @@ export interface Invoice {
   payload: any;
   paidBtnName: PaidBtnName;
   paidBtnUrl: Url;
-  isConfirmed: boolean;
-  confirmedAt?: Date;
 }
 
 export const invoiceIdValidator = (
@@ -97,11 +93,6 @@ export function parseInvoiceResponse(
     ),
     paidBtnName: response.paid_btn_name,
     paidBtnUrl: response.paid_btn_url,
-    isConfirmed: response.is_confirmed,
-    confirmedAt: (response.confirmed_at
-      ? new Date(response.confirmed_at)
-      : undefined
-    ),
   };
 
 }

@@ -23,27 +23,12 @@
 Node.js SDK for Telegram [CryptoBot][crypto-bot]
 ([CryptoPay API][crypto-pay-api]).
 
----
-
-## Contest-related information
-
-_(this section will be deleted after the contest)_
-
-See the [Crypto Pay API Review](https://telegra.ph/Crypto-Pay-API-Review-11-28)
-for notices regarding the API implementation.
-
-Sadly, I don't have enough time to finish the documentation,
-I've decided to spend more time to implement useful features ;)
-
----
 
 ## Features
 
 - A **complete Node.js compatible implementation** of the entire CryptoPay API as specified in its [documentation][crypto-pay-api],
-
 - **All LTS Node.js versions are supported** (starting from Node 12),
 - **HTTP-transport agnostic:** provides implementation of the [Got HTTP](https://github.com/sindresorhus/got) client, but allows you to use any library you want, thanks to the [dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle),
-
 - Build-in HTTP client supports **automatic time-outs**, **request retries** and **prevents server-side redirects** for security purposes,
 - **Written completely in TypeScript** from scratch in a very strict manner with 100% type coverage (and no *any*'s), ensuring that the library code is correct (type safe) by itself and also **provides high quality typing declarations** to make sure that your code is also correct and type safe,
 - Provides **complete interfaces, enumerations, constants and helper functions** for all the API methods, data models and all possible properties based on the API documentation and the observed API behavior. You can even use all these basic building blocks directly without the need to use any methods provided by the library!
@@ -61,6 +46,7 @@ I've decided to spend more time to implement useful features ;)
 - **Minimal possible dependencies** (all are high quality ones) updated to the latest versions,
 - **Source maps** for the library is generated and provided to you for easier debugging.
 
+
 ## Install
 
 Install the library as well as [Got HTTP](https://github.com/sindresorhus/got) (if you are going to use it).
@@ -72,9 +58,11 @@ npm install --save @crypto-pay/sdk [got]
 
 ## Usage
 
+
 ### Three API levels
 
 The library code is split into three tiers or three abstraction layers, they are described below.
+
 
 ### Top level API
 
@@ -180,6 +168,7 @@ You will need to at least specify an implementation of the HTTP client. We provi
 
 > You can find all the possible usage examples for top-level API layer in the [examples/api-client](examples/api-client) directory.
 
+
 ### Middle level API
 
 This abstraction level allows you to call each API method directly without using the `ApiClient` class. It gives you a little more control and response observability.
@@ -240,7 +229,6 @@ import { appToken } from '../app-token';
 
 })();
 ```
-
 
 
 ### Low level API
@@ -326,83 +314,11 @@ import {
 ```
 
 
-
 ### Handling monetary values
 
 Working with floating-point (decimal) numbers in JavaScript is not a trivial issue! Just read this amazing article: [What Every JavaScript Developer Should Know About Floating Points](https://modernweb.com/what-every-javascript-developer-should-know-about-floating-points/) by *Xuanyi Chew* to understand the problem better.
 
 In short, in order to prevent all possible conundrum related to decimal values (especially data loss and incorrect rounding) when working with monetary values (like prices) we would always return an instance of `Decimal` from [decimal.js-light](https://github.com/MikeMcl/decimal.js-light) library. Of course, you can specify monetary values in any format that you like (e.g. "string" or "number") when calling our library, but we would highly recommend you to also use `Decimals` whenever possible.
-
-### Confirming paid invoices
-
-The library provides a useful `confirmPaid()` helper method for payment confirmation workflow: it will automatically fetch the recently paid invoices and will confirm them one-by-one in parallel. You can provide a function that will be called for each confirmed invoice. The list of all the confirmed invoices will be returned in the end. The function will respect limits and concurrency options that you can specify.
-
-```typescript
-
-import got from 'got';
-
-import {
-  ApiClient,
-  GotHttpClient,
-  Network,
-
-} from '@crypto-pay/sdk';
-
-
-(async () => {
-
-  const httpClient = new GotHttpClient({ got });
-
-  const client = new ApiClient({
-    httpClient,
-    network: Network.Testnet,
-  });
-
-  try {
-    const { confirmedPayments } = await client.confirmPaid({
-      
-      // This is the number of invoices that will
-      // be requested from the server in one go:
-      limit: 100,
-        
-      // This is a number of invoies that
-      // can be processed in parallel:
-      concurrency: 10,
-        
-      // This function will be called for each confirmed invoice
-      handleConfirmation: async invoice => {
-          
-        console.log(
-          `Invoice #${invoice.invoiceId} is confirmed!`
-        );
-          
-        // Your function could be asynchronous,
-        // just return a Promise and the library will wait
-        // for your function to complete
-        // (respecting the concurrency limits).
-        await sleep(2000);
-          
-      },
-        
-    });
-
-    // All the confirmed invoices will be returned in the end
-    console.log(
-      `The following invoices were confirmed: ` +
-      confirmedPayments
-        .map(invoice => invoice.invoiceId)
-        .join(', ')
-    );
-
-  } catch (error) {
-    console.error(error);
-
-  }
-
-})();
-```
-
-
 
 
 ## Examples
@@ -416,11 +332,9 @@ three categories of examples:
   and easy to use. Only domain data is returned
   from the server.
 
-
 - [methods](./examples/methods)<br>
   Middle-level API layer, all the API methods could be
   executed directly, whole HTTP responses are returned.
-
 
 - [low-level](./examples/low-level)<br>
   The most advanced and low-level API possible, you could
@@ -477,22 +391,14 @@ Be advised, that using app token in the endpoint URL is considered a security fl
 **In order to mitigate the problem, make sure to never ever log HTTP requests made to the CryptoBot API server!**
 
 
-## Test Results
-
-Most of the library code is covered by unit tests,
-particularly the critical aspects of the API.
-
-![Test results](./assets/test-results.png "Test results")
-
-
 ## API
 
-…
+> TBD
 
 
 ## Contributing
 
-…
+> TBD
 
 
 ## License (MIT)
@@ -518,5 +424,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-[crypto-bot]: https://t.me/CryptoBot
-[crypto-pay-api]:https://telegra.ph/Crypto-Pay-API-11-25
+  [crypto-bot]: https://t.me/CryptoBot
+  [crypto-pay-api]:https://telegra.ph/Crypto-Pay-API-11-25

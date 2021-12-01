@@ -3,10 +3,11 @@ import got from 'got';
 
 import {
   ApiResponse,
+  appTokenHeaderName,
   FailedApiResponse,
   getEndpointUrl,
+  GetInvoicesRequest,
   GetInvoicesResponse,
-  GetPaymentsRequest,
   Network,
 
 } from '@crypto-pay/sdk';
@@ -16,13 +17,12 @@ import { appToken } from '../app-token';
 
 (async () => {
 
-  const apiRequest: GetPaymentsRequest = {
+  const apiRequest: GetInvoicesRequest = {
     offset: 0,
     count: 10,
   };
 
   const endpointUrl = getEndpointUrl({
-    appToken,
     method: 'getInvoices',
     network: Network.Testnet,
   });
@@ -35,6 +35,9 @@ import { appToken } from '../app-token';
       json: apiRequest,
       responseType: 'json',
       throwHttpErrors: false,
+      headers: {
+        [appTokenHeaderName]: appToken,
+      },
     });
 
     if (!body.ok) {

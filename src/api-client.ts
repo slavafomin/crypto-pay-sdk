@@ -2,15 +2,12 @@
 import { Invoice } from './api/common/invoice';
 import { defaultNetwork, Network } from './api/common/network';
 import { AppToken } from './api/common/types';
-import { confirmPaid, ConfirmPaidResult } from './api/helpers/confirm-paid';
-import { confirmPayment, ConfirmPaymentParams } from './api/methods/confirm-payment';
 import { createInvoice, CreateInvoiceParams } from './api/methods/create-invoice';
 import { getBalance, GetBalanceResult } from './api/methods/get-balance';
 import { getCurrencies, GetCurrenciesResult } from './api/methods/get-currencies';
 import { getExchangeRates, GetExchangeRatesResult } from './api/methods/get-exchange-rates';
 import { getInvoices, GetInvoicesParams, GetInvoicesResult } from './api/methods/get-invoices';
 import { getMe, GetMeResult } from './api/methods/get-me';
-import { getPayments, GetPaymentsParams, GetPaymentsResult } from './api/methods/get-payments';
 import { HttpClient } from './http-client/http-client';
 
 
@@ -120,52 +117,6 @@ export class ApiClient {
 
   }
 
-  public async getPayments(
-    params: GetPaymentsParams
-
-  ): Promise<GetPaymentsResult> {
-
-    const {
-      appToken,
-      httpClient,
-      network,
-
-    } = this.options;
-
-    const response = await getPayments({
-      appToken,
-      params,
-      httpClient,
-      network,
-    });
-
-    return response.payload.result;
-
-  }
-
-  public async confirmPayment(
-    params: ConfirmPaymentParams
-
-  ): Promise<Invoice> {
-
-    const {
-      appToken,
-      httpClient,
-      network,
-
-    } = this.options;
-
-    const response = await confirmPayment({
-      appToken,
-      params,
-      httpClient,
-      network,
-    });
-
-    return response.payload.result;
-
-  }
-
   public async getBalance(): Promise<GetBalanceResult> {
 
     const {
@@ -220,41 +171,6 @@ export class ApiClient {
     });
 
     return response.payload.result;
-
-  }
-
-  public async confirmPaid(options: {
-    limit?: number;
-    concurrency?: number;
-    handleConfirmation?: (
-      (confirmedInvoice: Invoice)
-        => (unknown | Promise<unknown>)
-    );
-
-  }): Promise<ConfirmPaidResult> {
-
-    const {
-      appToken,
-      httpClient,
-      network,
-
-    } = this.options;
-
-    const {
-      limit,
-      concurrency,
-      handleConfirmation,
-
-    } = options;
-
-    return confirmPaid({
-      appToken,
-      httpClient,
-      limit,
-      concurrency,
-      handleConfirmation,
-      network,
-    });
 
   }
 

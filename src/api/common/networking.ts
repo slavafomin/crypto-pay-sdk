@@ -1,11 +1,12 @@
 
-import { defaultNetwork, Network } from './common/network';
-import { AppToken} from './common/types';
+import { defaultNetwork, Network } from './network';
 
 
 export const endpointUrlTemplate = (
-  'https://{hostname}/app{appToken}/{method}'
+  'https://{hostname}/api/{method}'
 );
+
+export const appTokenHeaderName = 'Crypto-Pay-API-Token';
 
 export const endpointHostnames: Record<Network, string> = {
   [Network.Mainnet]: 'pay.crypt.bot',
@@ -13,14 +14,12 @@ export const endpointHostnames: Record<Network, string> = {
 };
 
 export function getEndpointUrl(options: {
-  appToken: AppToken;
   method: string;
   network?: Network;
 
 }) {
 
   const {
-    appToken,
     method,
     network = defaultNetwork,
 
@@ -28,7 +27,6 @@ export function getEndpointUrl(options: {
 
   return endpointUrlTemplate
     .replace('{hostname}', endpointHostnames[network])
-    .replace('{appToken}', appToken)
     .replace('{method}', method)
   ;
 

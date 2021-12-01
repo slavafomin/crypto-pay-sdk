@@ -1,9 +1,9 @@
 
 import { HttpClient, HttpRequestMethod, HttpResponse } from '../../http-client/http-client';
-import { getEndpointUrl } from '../endpoint';
 import { ApiError } from '../errors/api-error';
 import { ApiResponse, FailedApiResponse, SuccessApiResponse } from './api-response';
 import { defaultNetwork, Network } from './network';
+import { getEndpointUrl, appTokenHeaderName } from './networking';
 import { AppToken} from './types';
 
 
@@ -38,13 +38,15 @@ export async function makeRequest<RequestType, ResponseType>(options: {
       ApiResponse<ResponseType>
     >({
       url: getEndpointUrl({
-        appToken: appToken,
         method: methodName,
         network,
       }),
       method: httpMethod,
       query: query,
       body: body,
+      headers: {
+        [appTokenHeaderName]: appToken,
+      },
     })
   ;
 
