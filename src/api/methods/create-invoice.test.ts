@@ -224,12 +224,12 @@ describe('createInvoice()', () => {
     );
   });
 
-  it(`payload byte size must not exceed 1 KB`, async () => {
+  it(`payload byte size must not exceed 4 KB`, async () => {
     await expect(makeCall({
       params: {
         asset: CryptoCurrency.TON,
         amount: 100,
-        payload: 'Ы'.repeat(511) + 'A',
+        payload: 'Ы'.repeat(2048) + 'A',
       }
     })).rejects.toThrow(
       /"payload" byte size.*exceeds the limit/
